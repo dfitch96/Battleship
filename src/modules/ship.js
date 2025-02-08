@@ -2,11 +2,11 @@
 
 class Ship{
 
-    constructor(length){
+    constructor(id, length){
         if(typeof length !== "number"){
             throw new TypeError('ship constructor takes length of type number')
         }
-
+        this.id = id;
         this.length = length;
         this.hits = 0;
         this.sunk = false;
