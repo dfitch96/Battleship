@@ -6,6 +6,7 @@ class Gameboard{
         this.boardSize = 10;
         this.ships = [];
         this.board = this.initBoard();
+        this.misses = 0;
     }
 
     initBoard(){
@@ -17,6 +18,7 @@ class Gameboard{
                 board[i][j] = null;
             }
         }
+      
         return board;
     }
 
@@ -33,14 +35,39 @@ class Gameboard{
 
         if(axis === 'x' && (x + shipLength < this.boardSize)){
             for(let col = x; col < x + shipLength; col++){
-                this.board[y][col] = newShip;
+                this.board[y][col] = {
+                    ship: newShip,
+                    isHit: false
+                };
             }
         } else if(axis === 'y' && (y + shipLength < this.boardSize)){
-            for(let row = y; y < y + shipLength; row++){
-                this.board[row][x] = newShip;
+            console.log(shipLength +  y);
+            for(let row = y; row < (y + shipLength); row++){
+                console.log(row);
+                this.board[row][x] = {
+                    ship: newShip,
+                    isHit: false
+                };
             }
         }
 
+    }
+
+
+    recieveAttack(y, x){
+        if(this.board[y][x].isHit === true){
+            return false;
+        }
+
+
+        if(this.board[y][x] !== null){
+            this.board[y][x].ship.hit();
+            this.board[y][x].isHit = true;
+            return true;
+        } else {
+            // miss
+        }
+        
     }
 }
 
