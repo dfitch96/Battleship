@@ -75,6 +75,17 @@ describe('Gameboard', () => {
     });
 
 
+    test('placing a ship through the middle of another ship', () => {
+        const res1 = gameboard.placeShip(5, 3, 0);
+        const res2 = gameboard.placeShip(3, 2, 0, 'y');
+
+        expect(res1).toBe(true);
+        expect(res2).toBe(false);
+        expect(gameboard.board[3][0].ship.id).toBe(0);
+        expect(gameboard.board[2][0]).toBe(null);
+    })
+
+
     test('successful hit', () => {
         gameboard.placeShip(1, 0, 0);
         let res = gameboard.recieveAttack(0, 0);
@@ -112,6 +123,38 @@ describe('Gameboard', () => {
 
         expect(gameboard.board[0][0].ship.getHits()).toBe(3);
         expect(gameboard.board[0][0].ship.isSunk()).toBe(true);
+    });
+
+
+    test('attack miss', () => {
+        gameboard.placeShip(1, 0, 0);
+        const res = gameboard.recieveAttack(1, 1);
+        expect(res).toBe(false);
+        expect(gameboard.misses.length).toBe(1);
+        expect(gameboard.misses[0][0]).toBe(1);
+        expect(gameboard.misses[0][1]).toBe(1);
+    });
+
+
+    test('attack on coordinate already hit', () => {
+        gameboard.placeShip(1, 0, 0);
+        gameboard.recieveAttack(0, 0);
+        const res = gameboard.recieveAttack(0, 0);
+        expect(res).toBe(false);
+        expect(gameboard.misses.length).toBe(0);
+    });
+
+
+    test('all ships are sunk', () => {
+        gameboard.placeShip(1, 0, 0);
+        gameboard.recieveAttack(0, 0);
+        expect(gameboard.areShipsSunk()).toBe(true);
+    });
+
+
+    test('all ships are not sunk', () => {
+        gameboard.placeShip(1, 0, 0);
+        expect(gameboard.areShipsSunk()).toBe(false);
     });
 
 
