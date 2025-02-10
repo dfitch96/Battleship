@@ -27,7 +27,11 @@ class Gameboard{
 
         if(y < 0 || y >= this.boardSize || x < 0 || x >= this.boardSize || shipLength <= 0 || this.board[y][x] !== null){
             return false;
-        } 
+        } else if(axis === 'x' && !this.#verifyXAxis(y, x, shipLength)){
+            return false;
+        } else if(axis === 'y' && !this.#verifyYAxis(y, x, shipLength)){
+            return false;
+        }
 
         const newShipId = this.ships.length;
         const newShip = new Ship(newShipId, shipLength);
@@ -40,6 +44,7 @@ class Gameboard{
                     isHit: false
                 };
             }
+
         } else if(axis === 'y' && (y + shipLength < this.boardSize)){
             for(let row = y; row < (y + shipLength); row++){
                 this.board[row][x] = {
@@ -50,6 +55,31 @@ class Gameboard{
         }
 
         return true;
+
+    }
+
+    #verifyXAxis(y, x, shipLength){
+
+        for(let col = x; col < x + shipLength; col++){
+            if (this.board[y][col] !== null){
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
+    #verifyYAxis(y, x, shipLength){
+
+        for(let row = y; row < y + shipLength; row++){
+            if(this.board[row][x] !== null){
+                return false;
+            }
+        }
+
+        return true;
+
 
     }
 
