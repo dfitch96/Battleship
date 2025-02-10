@@ -17,6 +17,10 @@ class Gameboard{
         return null;
     }
 
+    getGameboard(){
+        return this.board;
+    }
+
     initBoard(){
 
         const board = [];

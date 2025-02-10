@@ -9,7 +9,10 @@ describe('Gameboard', () => {
     });
 
     test('placing a ship of size 1', () => {
-        gameboard.placeShip(1, 2, 2);
+        
+        expect(gameboard.placeShip(1, 2, 2)).toBe(true);
+        
+        //verify board state
         const cell = gameboard.getCell(2, 2);
         expect(cell.ship).not.toBe(null);
         expect(cell.ship).toEqual(expect.any(Ship));
@@ -19,7 +22,9 @@ describe('Gameboard', () => {
     });
 
     test('placing a ship of size 5 horizantally', () => {
-        gameboard.placeShip(5, 0, 0);
+        expect(gameboard.placeShip(5, 0, 0)).toBe(true);
+
+        //verify board state
         for(let col = 0; col < 5; col++){
             const cell = gameboard.getCell(0, col);
             expect(cell.ship).not.toBe(null);
@@ -30,7 +35,7 @@ describe('Gameboard', () => {
     });
 
     test('placing a ship of size 3 horizantally', () => {
-        gameboard.placeShip(3, 4, 4);
+        expect(gameboard.placeShip(3, 4, 4)).toBe(true);
         for(let col = 4; col < 7; col++){
             const cell = gameboard.getCell(4, col);
             expect(cell.ship).not.toBe(null);
@@ -42,7 +47,7 @@ describe('Gameboard', () => {
 
 
     test('placing a ship of size 5 vertically', () => {
-        gameboard.placeShip(5, 4, 0, 'y');
+        expect(gameboard.placeShip(5, 4, 0, 'y')).toBe(true);
         for(let row = 4; row < 9; row++){
             const cell = gameboard.getCell(row, 0);
             expect(cell.ship).not.toBe(null);
@@ -53,36 +58,31 @@ describe('Gameboard', () => {
     });
 
     test('placing a ship out of bounds', () => {
-        gameboard.placeShip(3, -5, 4);
-        gameboard.board.forEach(row => row.forEach(cell => expect(cell).toBe(null)));
+        const initialState = JSON.stringify(gameboard.getGameboard());
+        expect(gameboard.placeShip(3, -5, 4)).toBe(false);
+        expect(JSON.stringify(gameboard.getGameboard())).toEqual(initialState);
     });
 
     test('placing a ship with an invalid length', () => {
-        gameboard.placeShip(-5, 4, 5);
-        gameboard.board.forEach(row => row.forEach(cell => expect(cell).toBe(null)));
+        const initialState = JSON.stringify(gameboard.getGameboard());
+        expect(gameboard.placeShip(-5, 4, 5)).toBe(false);
+        expect(JSON.stringify(gameboard.getGameboard())).toEqual(initialState);
     });
 
 
     test('placing a ship where a ship has already been placed', () => {
-        gameboard.placeShip(1, 0, 0);
-        gameboard.placeShip(3, 0, 0);
-
-        expect(gameboard.getCell(0, 0).ship.id).toBe(0)
-
-        for(let col = 1; col < 3; col++){
-            expect(gameboard.getCell(0, col)).toBe(null);
-        }
+        expect(gameboard.placeShip(1, 0, 0)).toBe(true);
+        const beforeState = JSON.stringify(gameboard.getGameboard());
+        expect(gameboard.placeShip(3, 0, 0)).toBe(false);
+        expect(JSON.stringify(gameboard.getGameboard())).toEqual(beforeState);
     });
 
 
     test('placing a ship through the middle of another ship', () => {
-        const res1 = gameboard.placeShip(5, 3, 0);
-        const res2 = gameboard.placeShip(3, 2, 0, 'y');
-
-        expect(res1).toBe(true);
-        expect(res2).toBe(false);
-        expect(gameboard.getCell(3, 0).ship.id).toBe(0);
-        expect(gameboard.getCell(2, 0)).toBe(null);
+        expect(gameboard.placeShip(5, 3, 0)).toBe(true);
+        const beforeState = JSON.stringify(gameboard.getGameboard());
+        expect(gameboard.placeShip(3, 2, 0, 'y')).toBe(false);
+        expect(JSON.stringify(gameboard.getGameboard())).toEqual(beforeState);
     })
 
 
