@@ -9,6 +9,14 @@ class Gameboard{
         this.misses = [];
     }
 
+    getCell(y, x){
+        if (y >= 0 && y < this.boardSize && x >= 0 && x < this.boardSize){
+            return this.board[y][x];
+        }
+        
+        return null;
+    }
+
     initBoard(){
 
         const board = [];

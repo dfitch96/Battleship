@@ -10,7 +10,7 @@ describe('Gameboard', () => {
 
     test('placing a ship of size 1', () => {
         gameboard.placeShip(1, 2, 2);
-        const cell = gameboard.board[2][2];
+        const cell = gameboard.getCell(2, 2);
         expect(cell.ship).not.toBe(null);
         expect(cell.ship).toEqual(expect.any(Ship));
         expect(cell.ship.id).toBe(0);
@@ -21,7 +21,7 @@ describe('Gameboard', () => {
     test('placing a ship of size 5 horizantally', () => {
         gameboard.placeShip(5, 0, 0);
         for(let col = 0; col < 5; col++){
-            const cell = gameboard.board[0][col];
+            const cell = gameboard.getCell(0, col);
             expect(cell.ship).not.toBe(null);
             expect(cell.ship).toEqual(expect.any(Ship));
             expect(cell.ship.id).toBe(0);
@@ -32,7 +32,7 @@ describe('Gameboard', () => {
     test('placing a ship of size 3 horizantally', () => {
         gameboard.placeShip(3, 4, 4);
         for(let col = 4; col < 7; col++){
-            const cell = gameboard.board[4][col];
+            const cell = gameboard.getCell(4, col);
             expect(cell.ship).not.toBe(null);
             expect(cell.ship).toEqual(expect.any(Ship));
             expect(cell.ship.id).toBe(0);
@@ -44,7 +44,7 @@ describe('Gameboard', () => {
     test('placing a ship of size 5 vertically', () => {
         gameboard.placeShip(5, 4, 0, 'y');
         for(let row = 4; row < 9; row++){
-            const cell = gameboard.board[row][0];
+            const cell = gameboard.getCell(row, 0);
             expect(cell.ship).not.toBe(null);
             expect(cell.ship).toEqual(expect.any(Ship));
             expect(cell.ship.id).toBe(0);
@@ -67,10 +67,10 @@ describe('Gameboard', () => {
         gameboard.placeShip(1, 0, 0);
         gameboard.placeShip(3, 0, 0);
 
-        expect(gameboard.board[0][0].ship.id).toBe(0)
+        expect(gameboard.getCell(0, 0).ship.id).toBe(0)
 
         for(let col = 1; col < 3; col++){
-            expect(gameboard.board[0][col]).toBe(null);
+            expect(gameboard.getCell(0, col)).toBe(null);
         }
     });
 
@@ -81,8 +81,8 @@ describe('Gameboard', () => {
 
         expect(res1).toBe(true);
         expect(res2).toBe(false);
-        expect(gameboard.board[3][0].ship.id).toBe(0);
-        expect(gameboard.board[2][0]).toBe(null);
+        expect(gameboard.getCell(3, 0).ship.id).toBe(0);
+        expect(gameboard.getCell(2, 0)).toBe(null);
     })
 
 
@@ -91,9 +91,9 @@ describe('Gameboard', () => {
         let res = gameboard.recieveAttack(0, 0);
 
         expect(res).toBe(true);
-        expect(gameboard.board[0][0].isHit).toBe(true);
-        expect(gameboard.board[0][0].ship.getHits()).toBe(1);
-        expect(gameboard.board[0][0].ship.isSunk()).toBe(true);
+        expect(gameboard.getCell(0, 0).isHit).toBe(true);
+        expect(gameboard.getCell(0, 0).ship.getHits()).toBe(1);
+        expect(gameboard.getCell(0, 0).ship.isSunk()).toBe(true);
 
 
     });
@@ -104,9 +104,9 @@ describe('Gameboard', () => {
         gameboard.recieveAttack(0, 1);
 
         for(let col = 0; col < 2; col++){
-            expect(gameboard.board[0][col].isHit).toBe(true);
-            expect(gameboard.board[0][col].ship.getHits()).toBe(2);
-            expect(gameboard.board[0][col].ship.isSunk()).toBe(false);
+            expect(gameboard.getCell(0, col).isHit).toBe(true);
+            expect(gameboard.getCell(0, col).ship.getHits()).toBe(2);
+            expect(gameboard.getCell(0, col).ship.isSunk()).toBe(false);
         }
 
     });
@@ -118,11 +118,11 @@ describe('Gameboard', () => {
         gameboard.recieveAttack(0, 2);
 
         for(let col = 0; col < 3; col++){
-            expect(gameboard.board[0][col].isHit).toBe(true);
+            expect(gameboard.getCell(0, col).isHit).toBe(true);
         }
 
-        expect(gameboard.board[0][0].ship.getHits()).toBe(3);
-        expect(gameboard.board[0][0].ship.isSunk()).toBe(true);
+        expect(gameboard.getCell(0, 0).ship.getHits()).toBe(3);
+        expect(gameboard.getCell(0, 0).ship.isSunk()).toBe(true);
     });
 
 
