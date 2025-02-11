@@ -1,9 +1,11 @@
 import {Ship}from './ship.js';
 
+export const BOARD_SIZE = 10;
+
 export class Gameboard{
 
     constructor(){
-        this.boardSize = 10;
+        this.boardSize = BOARD_SIZE;
         this.ships = [];
         this.board = this.initBoard();
         this.misses = [];
