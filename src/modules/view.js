@@ -24,6 +24,11 @@ export function printGrid(gameboard){
 
 export function renderPlayerGrid(player){
 
+    if (player !== 'player' && player !== 'computer'){
+        console.log(`Unable to render ${player}`);
+        return;
+    }
+
     const main = document.querySelector('main');
     const playerContainer = document.createElement('div');
     playerContainer.setAttribute('id', `${player}-container`);
