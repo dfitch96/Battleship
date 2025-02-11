@@ -23,7 +23,7 @@ describe('Gameboard', () => {
     });
 
     test('placing a ship which extends out of bounds', () => {
-        expect(gameboard.placeShip(5, 0, 5)).toBe(false);
+        expect(gameboard.placeShip(5, 0, 6)).toBe(false);
     });
 
     test('placing a ship with string length', () => {
@@ -53,6 +53,17 @@ describe('Gameboard', () => {
             expect(cell.ship).not.toBe(null);
         }
     });
+
+    test('bottom right corner', () => {
+        expect(gameboard.placeShip(5, 1, 1)).toBe(true);
+        expect(gameboard.placeShip(3, 9, 7)).toBe(true);
+    });
+
+    test('crossing horizontally', () => {
+      
+        expect(gameboard.placeShip(5, 5, 4, 'y')).toBe(true);
+        expect(gameboard.placeShip(5, 6, 3, 'y')).toBe(false);
+    })
 
 
     test('placing a ship of size 5 vertically', () => {

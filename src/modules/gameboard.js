@@ -41,6 +41,7 @@ class Gameboard{
 
     placeShip(shipLength, y, x, axis = 'x'){
 
+        // verify ship placement is in bounds
         if(y < 0 || y >= this.boardSize || x < 0 || x >= this.boardSize || shipLength <= 0 || this.board[y][x] !== null){
             return false;
         } else if(axis === 'x' && !this.#verifyXAxis(y, x, shipLength)){
@@ -51,8 +52,7 @@ class Gameboard{
 
         const newShip = new Ship(shipLength);
         this.ships.push(newShip);
-
-        if(axis === 'x' && (x + shipLength < this.boardSize)){
+        if(axis === 'x'){
             for(let col = x; col < x + shipLength; col++){
                 this.board[y][col] = {
                     ship: newShip,
@@ -60,16 +60,13 @@ class Gameboard{
                 };
             }
 
-        } else if(axis === 'y' && (y + shipLength < this.boardSize)){
+        } else if(axis === 'y'){
             for(let row = y; row < (y + shipLength); row++){
                 this.board[row][x] = {
                     ship: newShip,
                     isHit: false
                 };
             }
-        } else {
-            this.ships.pop();
-            return false;
         }
 
         return true;
@@ -77,6 +74,9 @@ class Gameboard{
     }
 
     #verifyXAxis(y, x, shipLength){
+        if (x + shipLength > this.boardSize){
+            return false;
+        }
 
         for(let col = x; col < x + shipLength; col++){
             if (this.board[y][col] !== null){
@@ -89,6 +89,9 @@ class Gameboard{
     }
 
     #verifyYAxis(y, x, shipLength){
+        if (y + shipLength > this.boardSize){
+            return false;
+        }
 
         for(let row = y; row < y + shipLength; row++){
             if(this.board[row][x] !== null){
@@ -126,6 +129,26 @@ class Gameboard{
         }
 
         return true;
+
+    }
+
+
+    printSea(){
+        
+        for(let row = 0; row < this.boardSize; row++){
+            let rowStr = '|';
+            for(let col = 0; col < this.boardSize; col++){
+                if (this.getCell(row, col) !== null){
+                    rowStr += 'X';
+                } else {
+                    rowStr += ' ';
+                }
+                
+            }
+
+            rowStr += '|';
+            console.log(rowStr);
+        }
 
     }
 
