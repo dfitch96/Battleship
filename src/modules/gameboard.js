@@ -1,6 +1,6 @@
-const Ship = require('./ship');
+import {Ship}from './ship.js';
 
-class Gameboard{
+export class Gameboard{
 
     constructor(){
         this.boardSize = 10;
@@ -159,6 +159,3 @@ class Gameboard{
 
 }
 
-
-
-module.exports = Gameboard;

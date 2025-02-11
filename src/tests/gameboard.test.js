@@ -1,5 +1,5 @@
-const Gameboard = require('../modules/gameboard');
-const Ship = require('../modules/ship');
+import {Gameboard} from '../modules/gameboard.js';
+import {Ship} from '../modules/ship.js'
 
 describe('Gameboard', () => {
 

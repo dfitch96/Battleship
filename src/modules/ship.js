@@ -1,6 +1,6 @@
 
 
-class Ship{
+export class Ship{
 
     constructor(length){
         if(typeof length !== "number"){
@@ -30,4 +30,3 @@ class Ship{
 }
 
 
-module.exports = Ship;

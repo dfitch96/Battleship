@@ -1,5 +1,6 @@
-const Player = require('./modules/player');
-const {printGrid} = require('./modules/view')
+
+import {Player} from './modules/player.js';
+import {printGrid} from './modules/view.js';
 
 const player = new Player();
 const computer = new Player();

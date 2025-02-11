@@ -1,7 +1,7 @@
 
 
 
-function printGrid(gameboard){
+export function printGrid(gameboard){
         
         for(let row = 0; row < gameboard.getGameboardSize(); row++){
             let rowStr = '|';
@@ -20,10 +20,6 @@ function printGrid(gameboard){
 
     }
 
-
-module.exports = {
-    printGrid
-};
 
 
 
