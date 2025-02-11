@@ -25,6 +25,10 @@ class Gameboard{
         return this.misses;
     }
 
+    getGameboardSize(){
+        return this.boardSize;
+    }
+
     initBoard(){
 
         const board = [];
@@ -41,8 +45,8 @@ class Gameboard{
 
     placeShip(shipLength, y, x, axis = 'x'){
 
-        // verify ship placement is in bounds
-        if(y < 0 || y >= this.boardSize || x < 0 || x >= this.boardSize || shipLength <= 0 || this.board[y][x] !== null){
+        // verify ship placement is in bounds and space is not already occupied by a ship
+        if(y < 0 || y >= this.boardSize || x < 0 || x >= this.boardSize || shipLength <= 0){
             return false;
         } else if(axis === 'x' && !this.#verifyXAxis(y, x, shipLength)){
             return false;

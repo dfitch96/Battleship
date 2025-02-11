@@ -30,7 +30,7 @@ describe('Gameboard', () => {
         expect(() => gameboard.placeShip('asdfa', 0, 0)).toThrow(TypeError)
     });
 
-     test('placing a ship with an negative length', () => {
+    test('placing a ship with an negative length', () => {
         const initialState = gameboard.getGameboard();
         expect(gameboard.placeShip(-5, 4, 5)).toBe(false);
         expect(gameboard.getGameboard()).toEqual(initialState);
