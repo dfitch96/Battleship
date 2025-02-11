@@ -1,4 +1,24 @@
+:root{
+    --primary-color: rgb(45, 45, 129);
+}
+
+*{
+    box-sizing: border-box;
+}
+
+header{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+header > #ship-icon{
+    height: 7rem;
+    width: auto;
+}
 
 body{
-    background-color: blue;
+    background-color: var(--primary-color);
 }
