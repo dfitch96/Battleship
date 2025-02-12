@@ -65,13 +65,9 @@ export function addPlayerMoveEvents(handleMove){
     const boardCells = computerBoard.childNodes;
 
     boardCells.forEach(cell => {
-
         cell.addEventListener('click', handleMove);
-
         cell.addEventListener('mouseenter', handleMouseEnter);
-
         cell.addEventListener('mouseleave', handleMouseLeave);
-
     });
 }
 
@@ -114,7 +110,15 @@ export function renderSuccessfullAttack(player, y, x){
     const blastIcon = document.createElement('img');
     blastIcon.src = './images/blast.png';
     cell.appendChild(blastIcon);
-    
+}
+
+export function renderMissedAttack(player, y, x){
+
+    const playerBoard = document.querySelector(`#${player}`);
+    const cell = playerBoard.querySelector(`[data-row="${y}"][data-col="${x}"]`);
+    const missIcon = document.createElement('img');
+    missIcon.src = './images/close.png';
+    cell.appendChild(missIcon);
 
 }
 

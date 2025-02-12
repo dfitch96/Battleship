@@ -61,6 +61,9 @@ main .player-board{
 
 .board-item{
     border: thin solid var(--primary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .ship-item{
@@ -75,9 +78,11 @@ main .player-board{
     align-items: center;
 }
 
-.hit-item > img{
-    height: 3rem;
-    width: 3rem;
+
+.hit-item > img,
+.board-item > img{
+    height: 1.5rem;
+    width: 1.5rem;
 }
 
 
