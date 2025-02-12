@@ -44,6 +44,19 @@ export class Gameboard{
         return board;
     }
 
+    isAlreadyAttacked(y, x){
+
+        if(this.board[y][x] !== null){
+            return this.board[y][x].isHit;
+        } else if(this.misses){
+            
+            return this.misses.some(coordinate => coordinate.y === y && coordinate.x === x);
+        }
+
+        return false;
+        
+    }
+
 
     placeShip(shipLength, y, x, axis = 'x'){
 
@@ -132,6 +145,8 @@ export class Gameboard{
         return false;        
         
     }
+
+
 
     areShipsSunk(){
 

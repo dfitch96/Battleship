@@ -49,19 +49,30 @@ function gameDriver(player, computer, playerShips, computerShips){
 
 
     const handleComputerMove = function(){
-        const y = Math.floor(Math.random() * BOARD_SIZE);
-        const x = Math.floor(Math.random() * BOARD_SIZE);
-        console.log(`Computer attacking at y: ${y} and x: ${x}`);
+        let y = getRandomCoordinate();
+        let x = getRandomCoordinate();
+        
+        while (player.gameboard.isAlreadyAttacked(y, x)){
+            console.log(`${y}, ${x} already registered as an attack`);
+            y = getRandomCoordinate();
+            x = getRandomCoordinate();
+        }
 
         if(player.gameboard.recieveAttack(y, x)){
+            console.log(`Computer successfully attacked at y: ${y} and x: ${x}`);
             renderSuccessfullAttack('player', y, x);
             setTimeout(handleComputerMove, 1000);
         } else{
+            console.log(`Computer missed attack at y: ${y} and x: ${x}`);
             renderMissedAttack('player', y, x);
             enableBoard('computer');
             disableBoard('player');
         }
 
+    }
+
+    const getRandomCoordinate = function(){
+        return Math.floor(Math.random() * BOARD_SIZE);
     }
 
     addPlayerMoveEvents(handlePlayerMove);
