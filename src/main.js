@@ -1,6 +1,6 @@
 
 import {Player} from './modules/player.js';
-import {printGrid, renderPlayerGrid, renderShip, disableBoard, enableBoard, addPlayerMoveEvents} from './modules/view.js';
+import {printGrid, renderPlayerGrid, renderShip, disableBoard, enableBoard, addPlayerMoveEvents, renderSuccessfullAttack, removeCellEventListeners} from './modules/view.js';
 
 const player = new Player();
 const computer = new Player();
@@ -36,6 +36,9 @@ function gameDriver(player, computer, playerShips, computerShips){
     const handlePlayerMove = function(event){
         if(computer.gameboard.recieveAttack(event.target.dataset.row, event.target.dataset.col)){
             console.log('attack successful');
+            renderSuccessfullAttack('computer', event.target.dataset.row, event.target.dataset.col);
+            removeCellEventListeners(event.target, handlePlayerMove);
+            
         } else {
             console.log('attack unsuccessful');
         }

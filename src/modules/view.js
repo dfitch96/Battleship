@@ -1,6 +1,7 @@
 
 import {BOARD_SIZE} from './gameboard.js';
 
+
 export function printGrid(gameboard){
         
     for(let row = 0; row < gameboard.getGameboardSize(); row++){
@@ -67,22 +68,19 @@ export function addPlayerMoveEvents(handleMove){
 
         cell.addEventListener('click', handleMove);
 
-        cell.addEventListener('mouseenter', (event) => {
-        event.target.style.backgroundColor = "blue";
-        });
+        cell.addEventListener('mouseenter', handleMouseEnter);
 
-        cell.addEventListener('mouseleave', (event) => {
-            if(event.target.classList.contains('board-item')){
-                event.target.style.backgroundColor = 'var(--secondary-color)';
-            } else{
-                event.target.style.backgroundColor = 'var(--ship-color)';
-            }        
-        });
+        cell.addEventListener('mouseleave', handleMouseLeave);
 
     });
-    
-    
+}
 
+function handleMouseEnter(event){
+    event.target.style.backgroundColor = "blue";
+}
+
+function handleMouseLeave(event){
+    event.target.style.backgroundColor = '';
 }
 
 
@@ -105,6 +103,26 @@ export function enableBoard(player){
     }
 
 
+}
+
+export function renderSuccessfullAttack(player, y, x){
+
+    const playerBoard = document.querySelector(`#${player}`);
+    const cell = playerBoard.querySelector(`[data-row="${y}"][data-col="${x}"]`);
+    cell.classList.remove('board-item');
+    cell.classList.add('hit-item');
+    const blastIcon = document.createElement('img');
+    blastIcon.src = './images/blast.png';
+    cell.appendChild(blastIcon);
+    
+
+}
+
+export function removeCellEventListeners(target, handlePlayerMove){
+    target.style.backgroundColor = '';
+    target.removeEventListener('click', handlePlayerMove);
+    target.removeEventListener('mouseenter', handleMouseEnter);
+    target.removeEventListener('mouseleave', handleMouseLeave);
 }
 
 

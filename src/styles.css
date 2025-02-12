@@ -68,6 +68,18 @@ main .player-board{
     border: 2px solid var(--primary-color);
 }
 
+.hit-item{
+    background-color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hit-item > img{
+    height: 3rem;
+    width: 3rem;
+}
+
 
 h2.player-header{
     text-align: center;
