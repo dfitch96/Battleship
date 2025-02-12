@@ -57,7 +57,12 @@ export class Gameboard{
         }
 
         const newShip = new Ship(shipLength);
-        this.ships.push(newShip);
+        this.ships.push({
+            ship: newShip,
+            y,
+            x,
+            axis
+        });
         if(axis === 'x'){
             for(let col = x; col < x + shipLength; col++){
                 this.board[y][col] = {
@@ -128,8 +133,8 @@ export class Gameboard{
 
     areShipsSunk(){
 
-        for(const ship of this.ships){
-            if(!ship.isSunk()){
+        for(const shipData of this.ships){
+            if(!shipData.ship.isSunk()){
                 return false;
             }
         }

@@ -1,10 +1,13 @@
 :root{
     --primary-color: rgb(45, 45, 129);
     --secondary-color: rgb(255, 255, 255);
+    --ship-color: rgb(141, 136, 136, 40%);
+    --ship-border-color: rgb(45, 45, 129, 80%);
 }
 
 *{
     box-sizing: border-box;
+    color: white;
 }
 
 
@@ -35,6 +38,7 @@ main{
 
 main .player-board{
     background-color: var(--secondary-color);
+    position: relative;
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(10, 1fr);
@@ -43,9 +47,25 @@ main .player-board{
     width: 600px;
 }
 
-.board-item{
-    border: 1px solid black;
+.disabled-board{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    opacity: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+}
 
+.board-item{
+    border: thin solid var(--primary-color);
+}
+
+.ship-item{
+    background-color: var(--ship-color);
+    border: 2px solid var(--primary-color);
 }
 
 
