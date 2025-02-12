@@ -83,11 +83,26 @@ function handleMouseLeave(event){
 export function disableBoard(player){
 
     const playerGrid = document.querySelector(`#${player}`);
-    const disabled = document.createElement("div");
+    const disabled = document.createElement('div');
     disabled.classList.add('disabled-board');
     disabled.textContent = player === 'player' ? `Player's Turn` : `Computer's Turn`;
     playerGrid.appendChild(disabled);
     
+}
+
+export function disableBoardGameOver(player, opponent){
+
+    const playerGrid = document.querySelector(`#${player}`);
+    const disabled = document.createElement('div');
+    disabled.classList.add('disabled-board');
+    const hitsDiv = document.createElement('div');
+    hitsDiv.textContent = `Total Hits: ${opponent.gameboard.getTotalSuccessfulHits()}`;
+    const missesDiv = document.createElement('div');
+    missesDiv.textContent = `Total Misses: ${opponent.gameboard.getMisses().length}`;
+
+    disabled.appendChild(hitsDiv);
+    disabled.appendChild(missesDiv);
+    playerGrid.appendChild(disabled);
 }
 
 export function enableBoard(player){

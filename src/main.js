@@ -1,10 +1,12 @@
 
 import { BOARD_SIZE } from './modules/gameboard.js';
 import {Player} from './modules/player.js';
-import {printGrid, renderPlayerGrid, renderShip, disableBoard, enableBoard, addPlayerMoveEvents, renderSuccessfullAttack, renderMissedAttack, removeCellEventListeners} from './modules/view.js';
+import {printGrid, renderPlayerGrid, renderShip, disableBoard, enableBoard, addPlayerMoveEvents, renderSuccessfullAttack, renderMissedAttack, removeCellEventListeners, disableBoardGameOver} from './modules/view.js';
 
 const player = new Player();
 const computer = new Player();
+const MAX_TIMEOUT = 3000;
+const MIN_TIMEOUT = 1500;
 
 const playerShips = [
     [5, 1, 3, 'x'],
@@ -38,17 +40,42 @@ function gameDriver(player, computer, playerShips, computerShips){
     const handlePlayerMove = function(event){
         if(computer.gameboard.recieveAttack(event.target.dataset.row, event.target.dataset.col)){
             renderSuccessfullAttack('computer', event.target.dataset.row, event.target.dataset.col);
+            if(computer.gameboard.areShipsSunk()){
+                enableBoard('player');
+                gameOver('player', 'computer', player, computer);
+            }
         } else {
             renderMissedAttack('computer', event.target.dataset.row, event.target.dataset.col);
             enableBoard('player');
             disableBoard('computer');
-            setTimeout(handleComputerMove, 2000);
+            setTimeout(handleComputerMove, getRandomTimeout());
         }
         removeCellEventListeners(event.target, handlePlayerMove);
     }
 
 
     const handleComputerMove = function(){
+        
+        const move = getMove();
+        if(player.gameboard.recieveAttack(move.y, move.x)){
+            console.log(`Computer successfully attacked at y: ${move.y} and x: ${move.x}`);
+            renderSuccessfullAttack('player', move.y, move.x);
+            setTimeout(handleComputerMove, getRandomTimeout());
+            if(player.gameboard.areShipsSunk()){
+                enableBoard('computer');
+                gameOver('computer', 'player', computer, player);
+            }
+
+        } else{
+            console.log(`Computer missed attack at y: ${move.y} and x: ${move.x}`);
+            renderMissedAttack('player', move.y, move.x);
+            enableBoard('computer');
+            disableBoard('player');
+        }
+
+    }
+
+    const getMove = function(){
         let y = getRandomCoordinate();
         let x = getRandomCoordinate();
         
@@ -58,21 +85,22 @@ function gameDriver(player, computer, playerShips, computerShips){
             x = getRandomCoordinate();
         }
 
-        if(player.gameboard.recieveAttack(y, x)){
-            console.log(`Computer successfully attacked at y: ${y} and x: ${x}`);
-            renderSuccessfullAttack('player', y, x);
-            setTimeout(handleComputerMove, 1000);
-        } else{
-            console.log(`Computer missed attack at y: ${y} and x: ${x}`);
-            renderMissedAttack('player', y, x);
-            enableBoard('computer');
-            disableBoard('player');
-        }
+        return {y, x};
+    }
 
+
+    const gameOver = function(winner, loser, winnerPlayerObj, opponentPlayerObj){
+        console.log(`${winner} Wins!`);
+        disableBoardGameOver(winner, opponentPlayerObj);
+        disableBoardGameOver(loser, winnerPlayerObj);
     }
 
     const getRandomCoordinate = function(){
         return Math.floor(Math.random() * BOARD_SIZE);
+    }
+
+    const getRandomTimeout = function(){
+        return Math.floor(Math.random() * (MAX_TIMEOUT - MIN_TIMEOUT) + MIN_TIMEOUT);
     }
 
     addPlayerMoveEvents(handlePlayerMove);

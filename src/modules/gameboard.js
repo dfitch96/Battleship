@@ -46,15 +46,33 @@ export class Gameboard{
 
     isAlreadyAttacked(y, x){
 
+        // if the board is a ship, return if its been hit
         if(this.board[y][x] !== null){
             return this.board[y][x].isHit;
-        } else if(this.misses){
+
+            
+        } else if(this.misses){ // if there are misses, return whether this coordinate has been hit
             
             return this.misses.some(coordinate => coordinate.y === y && coordinate.x === x);
         }
 
         return false;
         
+    }
+
+    getTotalSuccessfulHits(){
+
+        let total = 0;
+        for(let row = 0; row < BOARD_SIZE; row++){
+            for(let col = 0; col < BOARD_SIZE; col++){
+                if (this.board[row][col] !== null && this.board[row][col].isHit){
+                    total++;
+                }
+            }
+        }
+
+        return total;
+
     }
 
 
