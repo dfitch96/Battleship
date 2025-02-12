@@ -1,5 +1,7 @@
 
 import {BOARD_SIZE} from './gameboard.js';
+import { playerTypes } from './player.js';
+import { ClassNames } from './class-names.js';
 
 
 export function printGrid(gameboard){
@@ -23,7 +25,7 @@ export function printGrid(gameboard){
 
 export function renderPlayerGrid(player){
 
-    if (player !== 'player' && player !== 'computer'){
+    if (player !== playerTypes.PLAYER && player !== playerTypes.COMPUTER){
         console.log(`Unable to render ${player}`);
         return;
     }
@@ -35,13 +37,13 @@ export function renderPlayerGrid(player){
     playerContainer.setAttribute('id', `${player}-container`);
 
     const header = document.createElement('h2');
-    header.classList.add('player-header');
+    header.classList.add(ClassNames.PLAYER_HEADER);
     header.textContent = `${player.slice(0, 1).toUpperCase() + player.slice(1, player.length)}`;
     playerContainer.append(header);
 
     const playerGrid = document.createElement('div');
     playerGrid.setAttribute('id', `${player}`);
-    playerGrid.classList.add('player-board')
+    playerGrid.classList.add(ClassNames.PLAYER_BOARD)
     
 
     for(let row = 0; row < BOARD_SIZE; row++){
@@ -49,7 +51,7 @@ export function renderPlayerGrid(player){
             const boardItem = document.createElement('div');
             boardItem.dataset.row = row;
             boardItem.dataset.col = col;
-            boardItem.classList.add('board-item');
+            boardItem.classList.add(ClassNames.BOARD_ITEM);
             playerGrid.appendChild(boardItem);
         }
     }
@@ -59,9 +61,9 @@ export function renderPlayerGrid(player){
 }
 
 
-export function addPlayerMoveEvents(handleMove){
+export function addPlayerMoveEventListeners(handleMove){
 
-    const computerBoard = document.querySelector('#computer');
+    const computerBoard = document.querySelector(`#${playerTypes.COMPUTER}`);
     const boardCells = computerBoard.childNodes;
 
     boardCells.forEach(cell => {
@@ -70,6 +72,14 @@ export function addPlayerMoveEvents(handleMove){
         cell.addEventListener('mouseleave', handleMouseLeave);
     });
 }
+
+export function removePlayerMoveEventListeners(target, handlePlayerMove){
+    target.style.backgroundColor = '';
+    target.removeEventListener('click', handlePlayerMove);
+    target.removeEventListener('mouseenter', handleMouseEnter);
+    target.removeEventListener('mouseleave', handleMouseLeave);
+}
+
 
 function handleMouseEnter(event){
     event.target.style.backgroundColor = "blue";
@@ -84,17 +94,27 @@ export function disableBoard(player){
 
     const playerGrid = document.querySelector(`#${player}`);
     const disabled = document.createElement('div');
-    disabled.classList.add('disabled-board');
-    disabled.textContent = player === 'player' ? `Player's Turn` : `Computer's Turn`;
+    disabled.classList.add(ClassNames.DISABLED_BOARD);
+    disabled.textContent = player === playerTypes.PLAYER ? `Player's Turn` : `Computer's Turn`;
     playerGrid.appendChild(disabled);
     
 }
+
+export function enableBoard(player){
+
+    const playerGrid = document.querySelector(`#${player}`);
+    const disabled = playerGrid.querySelector(`.${ClassNames.DISABLED_BOARD}`);
+    if(disabled){
+        playerGrid.removeChild(disabled);
+    }
+}
+
 
 export function disableBoardGameOver(player){
 
     const playerGrid = document.querySelector(`#${player.getPlayerType()}`);
     const disabled = document.createElement('div');
-    disabled.classList.add('disabled-board');
+    disabled.classList.add(ClassNames.DISABLED_BOARD);
     const hitsDiv = document.createElement('div');
     hitsDiv.textContent = `Total Hits: ${player.gameboard.getTotalSuccessfulHits()}`;
     const missesDiv = document.createElement('div');
@@ -105,23 +125,13 @@ export function disableBoardGameOver(player){
     playerGrid.appendChild(disabled);
 }
 
-export function enableBoard(player){
-
-    const playerGrid = document.querySelector(`#${player}`);
-    const disabled = playerGrid.querySelector('.disabled-board');
-    if(disabled){
-        playerGrid.removeChild(disabled);
-    }
-
-
-}
 
 export function renderSuccessfullAttack(player, y, x){
 
     const playerBoard = document.querySelector(`#${player}`);
     const cell = playerBoard.querySelector(`[data-row="${y}"][data-col="${x}"]`);
-    cell.classList.remove('board-item');
-    cell.classList.add('hit-item');
+    cell.classList.remove(ClassNames.BOARD_ITEM);
+    cell.classList.add(ClassNames.HIT_ITEM);
     const blastIcon = document.createElement('img');
     blastIcon.src = './images/blast.png';
     cell.appendChild(blastIcon);
@@ -135,13 +145,6 @@ export function renderMissedAttack(player, y, x){
     missIcon.src = './images/close.png';
     cell.appendChild(missIcon);
 
-}
-
-export function removeCellEventListeners(target, handlePlayerMove){
-    target.style.backgroundColor = '';
-    target.removeEventListener('click', handlePlayerMove);
-    target.removeEventListener('mouseenter', handleMouseEnter);
-    target.removeEventListener('mouseleave', handleMouseLeave);
 }
 
 
@@ -161,10 +164,11 @@ export function renderShip(shipLength, y, x, axis = 'x'){
 
 function renderHorizontalShip(shipLength, y, x){
 
+    const playerBoard = document.querySelector(`#${playerTypes.PLAYER}`);
     for(let col = x; col < x + shipLength; col++){
-        const boardItem = document.querySelector(`[data-row="${y}"][data-col="${col}"]`);
-        boardItem.classList.remove('board-item');
-        boardItem.classList.add('ship-item');
+        const boardItem = playerBoard.querySelector(`[data-row="${y}"][data-col="${col}"]`);
+        boardItem.classList.remove(ClassNames.BOARD_ITEM);
+        boardItem.classList.add(ClassNames.SHIP_ITEM);
         if(col !== x + shipLength - 1){
             boardItem.style.borderRight = '0';
         }
@@ -177,10 +181,11 @@ function renderHorizontalShip(shipLength, y, x){
 
 function renderVerticalShip(shipLength, y, x){
 
+    const playerBoard = document.querySelector(`#${playerTypes.PLAYER}`);
     for(let row = y; row < y + shipLength; row++){
-        const boardItem = document.querySelector(`[data-row="${row}"][data-col="${x}"]`);
-        boardItem.classList.remove('board-item');
-        boardItem.classList.add('ship-item');
+        const boardItem = playerBoard.querySelector(`[data-row="${row}"][data-col="${x}"]`);
+        boardItem.classList.remove(ClassNames.BOARD_ITEM);
+        boardItem.classList.add(ClassNames.SHIP_ITEM);
         if(row !== y + shipLength - 1){
             boardItem.style.borderBottom = '0';
         }

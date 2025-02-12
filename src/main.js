@@ -1,7 +1,7 @@
 
 import { BOARD_SIZE } from './modules/gameboard.js';
 import {Player, playerTypes} from './modules/player.js';
-import {printGrid, renderPlayerGrid, renderShip, disableBoard, enableBoard, addPlayerMoveEvents, renderSuccessfullAttack, renderMissedAttack, removeCellEventListeners, disableBoardGameOver} from './modules/view.js';
+import {printGrid, renderPlayerGrid, renderShip, disableBoard, enableBoard, addPlayerMoveEventListeners, renderSuccessfullAttack, renderMissedAttack, disableBoardGameOver, removePlayerMoveEventListeners} from './modules/view.js';
 
 const player = new Player(playerTypes.PLAYER);
 const computer = new Player(playerTypes.COMPUTER);
@@ -52,7 +52,7 @@ function gameDriver(player, computer, playerShips, computerShips){
             disableBoard(computer.getPlayerType());
             setTimeout(handleComputerMove, getRandomTimeout());
         }
-        removeCellEventListeners(event.target, handlePlayerMove);
+        removePlayerMoveEventListeners(event.target, handlePlayerMove);
     }
 
 
@@ -113,7 +113,7 @@ function gameDriver(player, computer, playerShips, computerShips){
 
 
     initializeGame();
-    addPlayerMoveEvents(handlePlayerMove);
+    addPlayerMoveEventListeners(handlePlayerMove);
 
 }
 
