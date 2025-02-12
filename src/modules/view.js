@@ -90,15 +90,15 @@ export function disableBoard(player){
     
 }
 
-export function disableBoardGameOver(player, opponent){
+export function disableBoardGameOver(player){
 
-    const playerGrid = document.querySelector(`#${player}`);
+    const playerGrid = document.querySelector(`#${player.getPlayerType()}`);
     const disabled = document.createElement('div');
     disabled.classList.add('disabled-board');
     const hitsDiv = document.createElement('div');
-    hitsDiv.textContent = `Total Hits: ${opponent.gameboard.getTotalSuccessfulHits()}`;
+    hitsDiv.textContent = `Total Hits: ${player.gameboard.getTotalSuccessfulHits()}`;
     const missesDiv = document.createElement('div');
-    missesDiv.textContent = `Total Misses: ${opponent.gameboard.getMisses().length}`;
+    missesDiv.textContent = `Total Misses: ${player.gameboard.getMisses().length}`;
 
     disabled.appendChild(hitsDiv);
     disabled.appendChild(missesDiv);

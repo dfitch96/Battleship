@@ -1,10 +1,10 @@
 
 import { BOARD_SIZE } from './modules/gameboard.js';
-import {Player} from './modules/player.js';
+import {Player, playerTypes} from './modules/player.js';
 import {printGrid, renderPlayerGrid, renderShip, disableBoard, enableBoard, addPlayerMoveEvents, renderSuccessfullAttack, renderMissedAttack, removeCellEventListeners, disableBoardGameOver} from './modules/view.js';
 
-const player = new Player();
-const computer = new Player();
+const player = new Player(playerTypes.PLAYER);
+const computer = new Player(playerTypes.COMPUTER);
 const MAX_TIMEOUT = 3000;
 const MIN_TIMEOUT = 1500;
 
@@ -25,8 +25,8 @@ const computerShips = [
 ];
 
 
-renderPlayerGrid('player');
-renderPlayerGrid('computer');
+renderPlayerGrid(player.getPlayerType());
+renderPlayerGrid(computer.getPlayerType());
 
 
 
@@ -35,20 +35,23 @@ function gameDriver(player, computer, playerShips, computerShips){
     playerShips.forEach(row => player.gameboard.placeShip(...row));
     playerShips.forEach(row => renderShip(...row));
     computerShips.forEach(row => computer.gameboard.placeShip(...row));
-    disableBoard('player');
+    disableBoard(player.getPlayerType());
     
 
     const handlePlayerMove = function(event){
-        if(computer.gameboard.recieveAttack(event.target.dataset.row, event.target.dataset.col)){
-            renderSuccessfullAttack('computer', event.target.dataset.row, event.target.dataset.col);
+        const row = event.target.dataset.row;
+        const col = event.target.dataset.col;
+
+        if(computer.gameboard.recieveAttack(row, col)){
+            renderSuccessfullAttack(computer.getPlayerType(), row, col);
             if(computer.gameboard.areShipsSunk()){
-                enableBoard('player');
-                gameOver('player', 'computer', player, computer);
+                enableBoard(player.getPlayerType());
+                gameOver(player, computer);
             }
         } else {
-            renderMissedAttack('computer', event.target.dataset.row, event.target.dataset.col);
-            enableBoard('player');
-            disableBoard('computer');
+            renderMissedAttack(computer.getPlayerType(), row, col);
+            enableBoard(player.getPlayerType());
+            disableBoard(computer.getPlayerType());
             setTimeout(handleComputerMove, getRandomTimeout());
         }
         removeCellEventListeners(event.target, handlePlayerMove);
@@ -60,18 +63,18 @@ function gameDriver(player, computer, playerShips, computerShips){
         const move = getMove();
         if(player.gameboard.recieveAttack(move.y, move.x)){
             console.log(`Computer successfully attacked at y: ${move.y} and x: ${move.x}`);
-            renderSuccessfullAttack('player', move.y, move.x);
+            renderSuccessfullAttack(player.getPlayerType(), move.y, move.x);
             setTimeout(handleComputerMove, getRandomTimeout());
             if(player.gameboard.areShipsSunk()){
-                enableBoard('computer');
-                gameOver('computer', 'player', computer, player);
+                enableBoard(computer.getPlayerType());
+                gameOver(computer, player);
             }
 
         } else{
             console.log(`Computer missed attack at y: ${move.y} and x: ${move.x}`);
-            renderMissedAttack('player', move.y, move.x);
-            enableBoard('computer');
-            disableBoard('player');
+            renderMissedAttack(player.getPlayerType(), move.y, move.x);
+            enableBoard(computer.getPlayerType());
+            disableBoard(player.getPlayerType());
         }
 
     }
@@ -90,10 +93,12 @@ function gameDriver(player, computer, playerShips, computerShips){
     }
 
 
-    const gameOver = function(winner, loser, winnerPlayerObj, opponentPlayerObj){
-        console.log(`${winner} Wins!`);
-        disableBoardGameOver(winner, opponentPlayerObj);
-        disableBoardGameOver(loser, winnerPlayerObj);
+    const gameOver = function(winner, loser){
+        console.log(`${winner.getPlayerType()} Wins!`);
+        // disable the winners board and display their hits and misses
+        disableBoardGameOver(winner);
+        // disable the losers board and display their hits and misses
+        disableBoardGameOver(loser);
     }
 
     const getRandomCoordinate = function(){
