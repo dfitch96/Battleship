@@ -20,8 +20,6 @@ export function printGrid(gameboard){
 
 }
 
-
-
 export function renderPlayerGrid(player){
 
     if (player !== 'player' && player !== 'computer'){
@@ -60,21 +58,6 @@ export function renderPlayerGrid(player){
 }
 
 
-export function renderShip(shipLength, y, x, axis = 'x'){
-    
-    if(y < 0 || y >= BOARD_SIZE || x < 0 || x >= BOARD_SIZE || shipLength <= 0){
-        return;
-    } 
-
-    if(axis === 'x'){
-        renderHorizontalShip(shipLength, y, x);
-    } else if (axis === 'y'){
-        renderVerticalShip(shipLength, y, x);
-    }
-}
-
-
-
 export function disableBoard(player){
 
     const playerGrid = document.querySelector(`#${player}`);
@@ -94,6 +77,20 @@ export function enableBoard(player){
     }
 
 
+}
+
+
+export function renderShip(shipLength, y, x, axis = 'x'){
+    
+    if(y < 0 || y >= BOARD_SIZE || x < 0 || x >= BOARD_SIZE || shipLength <= 0){
+        return;
+    } 
+
+    if(axis === 'x'){
+        renderHorizontalShip(shipLength, y, x);
+    } else if (axis === 'y'){
+        renderVerticalShip(shipLength, y, x);
+    }
 }
 
 
