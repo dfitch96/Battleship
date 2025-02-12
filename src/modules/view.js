@@ -58,6 +58,34 @@ export function renderPlayerGrid(player){
 }
 
 
+export function addPlayerMoveEvents(handleMove){
+
+    const computerBoard = document.querySelector('#computer');
+    const boardCells = computerBoard.childNodes;
+
+    boardCells.forEach(cell => {
+
+        cell.addEventListener('click', handleMove);
+
+        cell.addEventListener('mouseenter', (event) => {
+        event.target.style.backgroundColor = "blue";
+        });
+
+        cell.addEventListener('mouseleave', (event) => {
+            if(event.target.classList.contains('board-item')){
+                event.target.style.backgroundColor = 'var(--secondary-color)';
+            } else{
+                event.target.style.backgroundColor = 'var(--ship-color)';
+            }        
+        });
+
+    });
+    
+    
+
+}
+
+
 export function disableBoard(player){
 
     const playerGrid = document.querySelector(`#${player}`);

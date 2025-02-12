@@ -1,6 +1,6 @@
 
 import {Player} from './modules/player.js';
-import {printGrid, renderPlayerGrid, renderShip, disableBoard, enableBoard} from './modules/view.js';
+import {printGrid, renderPlayerGrid, renderShip, disableBoard, enableBoard, addPlayerMoveEvents} from './modules/view.js';
 
 const player = new Player();
 const computer = new Player();
@@ -25,11 +25,28 @@ const computerShips = [
 renderPlayerGrid('player');
 renderPlayerGrid('computer');
 
-playerShips.forEach(row => player.gameboard.placeShip(...row));
-playerShips.forEach(row => renderShip(...row));
 
-computerShips.forEach(row => computer.gameboard.placeShip(...row));
-printGrid(computer.gameboard);
+
+function gameDriver(player, computer, playerShips, computerShips){
+
+    playerShips.forEach(row => player.gameboard.placeShip(...row));
+    playerShips.forEach(row => renderShip(...row));
+    computerShips.forEach(row => computer.gameboard.placeShip(...row));
+    
+    const handlePlayerMove = function(event){
+        if(computer.gameboard.recieveAttack(event.target.dataset.row, event.target.dataset.col)){
+            console.log('attack successful');
+        } else {
+            console.log('attack unsuccessful');
+        }
+    }
+
+    addPlayerMoveEvents(handlePlayerMove);
+
+}
+
+
+gameDriver(player, computer, playerShips, computerShips);
 
 
 

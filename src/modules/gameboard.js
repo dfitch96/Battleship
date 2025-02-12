@@ -118,8 +118,10 @@ export class Gameboard{
 
     recieveAttack(y, x){
         
-        if(this.board[y][x] === null && !this.misses.some(coordinates => coordinates.y === y && coordinates.x === x)){
-            this.misses.push({y, x});
+        if(this.board[y][x] === null){
+            if(!this.misses.some(coordinates => coordinates.y === y && coordinates.x === x)){
+                this.misses.push({y, x});
+            }
             return false;
         } else if(!this.board[y][x].isHit){
             this.board[y][x].ship.hit();
