@@ -37,6 +37,7 @@ function gameDriver(player, computer, playerShips, computerShips){
     computerShips.forEach(row => computer.gameboard.placeShip(...row));
     disableBoard('player');
     
+
     const handlePlayerMove = function(event){
         if(computer.gameboard.recieveAttack(event.target.dataset.row, event.target.dataset.col)){
             renderSuccessfullAttack('computer', event.target.dataset.row, event.target.dataset.col);
