@@ -25,19 +25,17 @@ const computerShips = [
 ];
 
 
-renderPlayerGrid(player.getPlayerType());
-renderPlayerGrid(computer.getPlayerType());
-
-
-
 function gameDriver(player, computer, playerShips, computerShips){
 
-    playerShips.forEach(row => player.gameboard.placeShip(...row));
-    playerShips.forEach(row => renderShip(...row));
-    computerShips.forEach(row => computer.gameboard.placeShip(...row));
-    disableBoard(player.getPlayerType());
+    const initializeGame = function(){
+        renderPlayerGrid(player.getPlayerType());
+        renderPlayerGrid(computer.getPlayerType());
+        playerShips.forEach(row => player.gameboard.placeShip(...row));
+        playerShips.forEach(row => renderShip(...row));
+        computerShips.forEach(row => computer.gameboard.placeShip(...row));
+        disableBoard(player.getPlayerType());
+    }
     
-
     const handlePlayerMove = function(event){
         const row = event.target.dataset.row;
         const col = event.target.dataset.col;
@@ -79,6 +77,23 @@ function gameDriver(player, computer, playerShips, computerShips){
 
     }
 
+
+    const gameOver = function(winner, loser){
+        console.log(`${winner.getPlayerType()} Wins!`);
+        // disable the winners board and display their hits and misses
+        disableBoardGameOver(winner);
+        // disable the losers board and display their hits and misses
+        disableBoardGameOver(loser);
+    }
+
+    const getRandomTimeout = function(){
+        return Math.floor(Math.random() * (MAX_TIMEOUT - MIN_TIMEOUT) + MIN_TIMEOUT);
+    }
+
+
+
+
+    // COMPUTER AI FUNCTIONS
     const getMove = function(){
         let y = getRandomCoordinate();
         let x = getRandomCoordinate();
@@ -92,23 +107,12 @@ function gameDriver(player, computer, playerShips, computerShips){
         return {y, x};
     }
 
-
-    const gameOver = function(winner, loser){
-        console.log(`${winner.getPlayerType()} Wins!`);
-        // disable the winners board and display their hits and misses
-        disableBoardGameOver(winner);
-        // disable the losers board and display their hits and misses
-        disableBoardGameOver(loser);
-    }
-
     const getRandomCoordinate = function(){
         return Math.floor(Math.random() * BOARD_SIZE);
     }
 
-    const getRandomTimeout = function(){
-        return Math.floor(Math.random() * (MAX_TIMEOUT - MIN_TIMEOUT) + MIN_TIMEOUT);
-    }
 
+    initializeGame();
     addPlayerMoveEvents(handlePlayerMove);
 
 }
