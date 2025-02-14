@@ -3,56 +3,43 @@ import { BOARD_SIZE } from './modules/gameboard.js';
 import {Player, playerTypes} from './modules/player.js';
 import { MoveMaker } from './modules/move-maker.js';
 import { ShipTypes } from './modules/ship-types.js';
-import {printGrid, renderPlayerGrid, renderShip, disableBoard, enableBoard, addPlayerMoveEventListeners, renderSuccessfullAttack, renderMissedAttack, disableBoardGameOver, removePlayerMoveEventListeners, addButtonGroup, addButton} from './modules/view.js';
-
-const player = new Player(playerTypes.PLAYER);
-const computer = new Player(playerTypes.COMPUTER);
-const MAX_TIMEOUT = 3000;
-const MIN_TIMEOUT = 1500;
-
-const playerShips = [
-    [5, 1, 3, 'x'],
-    [4, 1, 1, 'y'],
-    [3, 4, 4, 'x'],
-    [3, 6 , 2, 'y'],
-    [2, 7, 6, 'x']
-];
-
-const computerShips = [
-    [5, 1, 3, 'x'],
-    [4, 1, 1, 'y'],
-    [3, 4, 4, 'x'],
-    [3, 6 , 2, 'y'],
-    [2, 7, 6, 'x']
-];
+import {printGrid, renderPlayerGrid, renderShip, clearPlayerGrid, disableBoard, enableBoard, addPlayerMoveEventListeners, renderSuccessfullAttack, renderMissedAttack, disableBoardGameOver, removePlayerMoveEventListeners, addButtonGroup, addButton, removeButtonGroup} from './modules/view.js';
 
 
+const MAX_TIMEOUT = 2000;
+const MIN_TIMEOUT = 1000;
 
-
-function gameDriver(player, computer, computerShips){
+function gameDriver(){
 
     const moveMaker = new MoveMaker();
+    const player = new Player(playerTypes.PLAYER);
+    const computer = new Player(playerTypes.COMPUTER);
+    const computerShips = [
+        [5, 1, 3, 'x'],
+        [4, 1, 1, 'y'],
+        [3, 4, 4, 'x'],
+        [3, 6 , 2, 'y'],    
+        [2, 7, 6, 'x']
+    ];
 
 
-    
-    
-    const initializeGame = function(){
+    const setupPlayerBoard = function(){
 
-        // render each players board
         renderPlayerGrid(player.getPlayerType());
-        
-
-        // place random ships for the player
         placeRandomShips(player.gameboard);
         player.gameboard.getShips().forEach(boardObj => renderShip(boardObj.ship.length, boardObj.y, boardObj.x, boardObj.axis));
         addButtonGroup();
         addButton('Randomize', handleRandomizeOnClick);
-        // place computer ships
-        //renderPlayerGrid(computer.getPlayerType());
-        //computerShips.forEach(row => computer.gameboard.placeShip(...row));
+        addButton('Start Game', handleStartGameOnClick);
+    }
+    
+    const initializeGame = function(){
+
+        renderPlayerGrid(computer.getPlayerType());
+        computerShips.forEach(row => computer.gameboard.placeShip(...row));
 
         // disable players board to allow them to make the first move
-        //disableBoard(player.getPlayerType());
+        disableBoard(player.getPlayerType());
     }
 
 
@@ -124,23 +111,24 @@ function gameDriver(player, computer, computerShips){
 
     const gameOver = function(winner, loser){
         console.log(`${winner.getPlayerType()} Wins!`);
-        // disable the winners board and display their hits and misses
         disableBoardGameOver(winner);
-        // disable the losers board and display their hits and misses
         disableBoardGameOver(loser);
     }
 
-
-  
-
     const handleRandomizeOnClick = function(){
-        // clear player container
-        const main = document.querySelector('main');
-        main.textContent = '';
+    
+        clearPlayerGrid();
         player.gameboard.reset();
+        placeRandomShips(player.gameboard);
+        player.gameboard.getShips().forEach(boardObj => renderShip(boardObj.ship.length, boardObj.y, boardObj.x, boardObj.axis));
+
+    }
+
+    const handleStartGameOnClick = function(){
+
+        removeButtonGroup();
         initializeGame();
-
-
+        addPlayerMoveEventListeners(handlePlayerMove);
     }
 
     const getRandomTimeout = function(){
@@ -153,14 +141,11 @@ function gameDriver(player, computer, computerShips){
     }
     
 
-
-    initializeGame();
-    //addPlayerMoveEventListeners(handlePlayerMove);
-
+    setupPlayerBoard();
 }
 
 
-gameDriver(player, computer, playerShips, computerShips);
+gameDriver();
 
 
 

@@ -23,6 +23,22 @@ export function printGrid(gameboard){
 
 }
 
+export function clearPlayerGrid(){
+    const playerGrid = document.querySelector(`#${playerTypes.PLAYER}`);
+    for(let row = 0; row < BOARD_SIZE; row++){
+        for(let col = 0; col < BOARD_SIZE; col++){
+            const gridCell = playerGrid.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+            if (gridCell.classList.contains(ClassNames.SHIP_ITEM)){
+                gridCell.removeAttribute('style');
+                gridCell.classList.remove(ClassNames.SHIP_ITEM);
+                gridCell.classList.add(ClassNames.BOARD_ITEM);
+            }
+        }
+    }
+
+}
+
+
 export function renderPlayerGrid(player){
 
     if (player !== playerTypes.PLAYER && player !== playerTypes.COMPUTER){
@@ -59,6 +75,7 @@ export function renderPlayerGrid(player){
     playerContainer.appendChild(playerGrid);
     main.appendChild(playerContainer);
 }
+
 
 
 export function addPlayerMoveEventListeners(handleMove){
@@ -196,13 +213,21 @@ function renderVerticalShip(shipLength, y, x){
 }
 
 
-export const addButtonGroup = function(handler){
+export const addButtonGroup = function(){
 
     const playerContainer = document.querySelector(`#${playerTypes.PLAYER}-container`);
     const buttonsDiv = document.createElement('div');
     buttonsDiv.classList.add(ClassNames.BUTTONS);
 
     playerContainer.appendChild(buttonsDiv);
+
+}
+
+
+export function removeButtonGroup(){
+    const playerContainer = document.querySelector(`#${playerTypes.PLAYER}-container`);
+     const buttonsDiv = playerContainer.querySelector(`.${ClassNames.BUTTONS}`);
+     playerContainer.removeChild(buttonsDiv);
 
 }
 
@@ -214,9 +239,6 @@ export function addButton(btnText, handler){
     newButton.textContent = btnText;
     newButton.addEventListener('click', handler);
     buttonsDiv.appendChild(newButton);
-
-
-
 }
 
 
