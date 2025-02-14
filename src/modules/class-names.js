@@ -6,4 +6,5 @@ export const ClassNames = {
     SHIP_ITEM: 'ship-item',
     HIT_ITEM: 'hit-item',
     PLAYER_HEADER: 'player-header',
+    BUTTONS: 'buttons'
 };

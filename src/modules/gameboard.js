@@ -11,6 +11,13 @@ export class Gameboard{
         this.misses = [];
     }
 
+
+    reset(){
+        this.ships = [];
+        this.board = this.initBoard();
+        this.misses = [];
+    }
+
     getCell(y, x){
         if (y >= 0 && y < this.boardSize && x >= 0 && x < this.boardSize){
             return this.board[y][x];

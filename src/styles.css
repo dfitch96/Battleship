@@ -88,3 +88,16 @@ h2.player-header{
     text-align: center;
 }
 
+.buttons{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 15px;
+    
+}
+
+.buttons button{
+    color: black;
+    padding: 5px;
+}
+

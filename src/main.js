@@ -3,7 +3,7 @@ import { BOARD_SIZE } from './modules/gameboard.js';
 import {Player, playerTypes} from './modules/player.js';
 import { MoveMaker } from './modules/move-maker.js';
 import { ShipTypes } from './modules/ship-types.js';
-import {printGrid, renderPlayerGrid, renderShip, disableBoard, enableBoard, addPlayerMoveEventListeners, renderSuccessfullAttack, renderMissedAttack, disableBoardGameOver, removePlayerMoveEventListeners} from './modules/view.js';
+import {printGrid, renderPlayerGrid, renderShip, disableBoard, enableBoard, addPlayerMoveEventListeners, renderSuccessfullAttack, renderMissedAttack, disableBoardGameOver, removePlayerMoveEventListeners, addButtonGroup, addButton} from './modules/view.js';
 
 const player = new Player(playerTypes.PLAYER);
 const computer = new Player(playerTypes.COMPUTER);
@@ -29,41 +29,30 @@ const computerShips = [
 
 
 
-function mainDriver(){
-
-    let player = new Player(playerTypes.PLAYER);
-    let computer = new Player(playerTypes.COMPUTER);
-
-
-    const initializeScreen = function(){
-        renderPlayerGrid(player.getPlayerType());
-        renderPlayerGrid(computer.getPlayerType());
-    }
-
-
-}
-
-
-
-function gameDriver(player, computer, playerShips, computerShips){
+function gameDriver(player, computer, computerShips){
 
     const moveMaker = new MoveMaker();
+
+
+    
     
     const initializeGame = function(){
 
         // render each players board
         renderPlayerGrid(player.getPlayerType());
-        renderPlayerGrid(computer.getPlayerType());
+        
 
         // place random ships for the player
         placeRandomShips(player.gameboard);
         player.gameboard.getShips().forEach(boardObj => renderShip(boardObj.ship.length, boardObj.y, boardObj.x, boardObj.axis));
-
+        addButtonGroup();
+        addButton('Randomize', handleRandomizeOnClick);
         // place computer ships
-        computerShips.forEach(row => computer.gameboard.placeShip(...row));
+        //renderPlayerGrid(computer.getPlayerType());
+        //computerShips.forEach(row => computer.gameboard.placeShip(...row));
 
         // disable players board to allow them to make the first move
-        disableBoard(player.getPlayerType());
+        //disableBoard(player.getPlayerType());
     }
 
 
@@ -141,6 +130,19 @@ function gameDriver(player, computer, playerShips, computerShips){
         disableBoardGameOver(loser);
     }
 
+
+  
+
+    const handleRandomizeOnClick = function(){
+        // clear player container
+        const main = document.querySelector('main');
+        main.textContent = '';
+        player.gameboard.reset();
+        initializeGame();
+
+
+    }
+
     const getRandomTimeout = function(){
         return Math.floor(Math.random() * (MAX_TIMEOUT - MIN_TIMEOUT) + MIN_TIMEOUT);
     }
@@ -153,7 +155,7 @@ function gameDriver(player, computer, playerShips, computerShips){
 
 
     initializeGame();
-    addPlayerMoveEventListeners(handlePlayerMove);
+    //addPlayerMoveEventListeners(handlePlayerMove);
 
 }
 

@@ -196,6 +196,31 @@ function renderVerticalShip(shipLength, y, x){
 }
 
 
+export const addButtonGroup = function(handler){
+
+    const playerContainer = document.querySelector(`#${playerTypes.PLAYER}-container`);
+    const buttonsDiv = document.createElement('div');
+    buttonsDiv.classList.add(ClassNames.BUTTONS);
+
+    playerContainer.appendChild(buttonsDiv);
+
+}
+
+
+export function addButton(btnText, handler){
+
+    const buttonsDiv = document.querySelector(`.${ClassNames.BUTTONS}`);
+    const newButton = document.createElement('button');
+    newButton.textContent = btnText;
+    newButton.addEventListener('click', handler);
+    buttonsDiv.appendChild(newButton);
+
+
+
+}
+
+
+
 
 
 
