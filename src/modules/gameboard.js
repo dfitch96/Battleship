@@ -19,6 +19,11 @@ export class Gameboard{
         return null;
     }
 
+
+    getShips(){
+        return this.ships;
+    }
+
     getGameboard(){
         return this.board;
     }

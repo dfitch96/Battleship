@@ -1,6 +1,8 @@
 
 import { BOARD_SIZE } from './modules/gameboard.js';
 import {Player, playerTypes} from './modules/player.js';
+import { MoveMaker } from './modules/move-maker.js';
+import { ShipTypes } from './modules/ship-types.js';
 import {printGrid, renderPlayerGrid, renderShip, disableBoard, enableBoard, addPlayerMoveEventListeners, renderSuccessfullAttack, renderMissedAttack, disableBoardGameOver, removePlayerMoveEventListeners} from './modules/view.js';
 
 const player = new Player(playerTypes.PLAYER);
@@ -25,17 +27,70 @@ const computerShips = [
 ];
 
 
-function gameDriver(player, computer, playerShips, computerShips){
 
-    const initializeGame = function(){
+
+function mainDriver(){
+
+    let player = new Player(playerTypes.PLAYER);
+    let computer = new Player(playerTypes.COMPUTER);
+
+
+    const initializeScreen = function(){
         renderPlayerGrid(player.getPlayerType());
         renderPlayerGrid(computer.getPlayerType());
-        playerShips.forEach(row => player.gameboard.placeShip(...row));
-        playerShips.forEach(row => renderShip(...row));
+    }
+
+
+}
+
+
+
+function gameDriver(player, computer, playerShips, computerShips){
+
+    const moveMaker = new MoveMaker();
+    
+    const initializeGame = function(){
+
+        // render each players board
+        renderPlayerGrid(player.getPlayerType());
+        renderPlayerGrid(computer.getPlayerType());
+
+        // place random ships for the player
+        placeRandomShips(player.gameboard);
+        player.gameboard.getShips().forEach(boardObj => renderShip(boardObj.ship.length, boardObj.y, boardObj.x, boardObj.axis));
+
+        // place computer ships
         computerShips.forEach(row => computer.gameboard.placeShip(...row));
+
+        // disable players board to allow them to make the first move
         disableBoard(player.getPlayerType());
     }
-    
+
+
+    const placeRandomShips = function(playerBoard){
+
+        for(const shipKey in ShipTypes){
+            console.log(`${shipKey} ALLOCATED: ${ShipTypes[shipKey][0]} LENGTH: ${ShipTypes[shipKey][1]}`);
+
+            const numAllocated = ShipTypes[shipKey][0];
+            const shipLength = ShipTypes[shipKey][1];
+            // for the number of ships which are allocated of this type,
+            for(let i = 0; i < numAllocated; i++){
+                let y = getRandomCoordinate();
+                let x = getRandomCoordinate();
+                let axis = Math.round(Math.random()) === 0 ? 'x' : 'y';
+
+                while(!playerBoard.placeShip(shipLength, y, x, axis)){
+                    y = getRandomCoordinate();
+                    x = getRandomCoordinate();
+                    axis = Math.round(Math.random()) === 0 ? 'x' : 'y';
+                }
+
+            }
+        }
+    }
+
+
     const handlePlayerMove = function(event){
         const row = event.target.dataset.row;
         const col = event.target.dataset.col;
@@ -58,7 +113,7 @@ function gameDriver(player, computer, playerShips, computerShips){
 
     const handleComputerMove = function(){
         
-        const move = getMove();
+        const move = moveMaker.getMove();
         if(player.gameboard.recieveAttack(move.y, move.x)){
             console.log(`Computer successfully attacked at y: ${move.y} and x: ${move.x}`);
             renderSuccessfullAttack(player.getPlayerType(), move.y, move.x);
@@ -91,25 +146,10 @@ function gameDriver(player, computer, playerShips, computerShips){
     }
 
 
-
-
-    // COMPUTER AI FUNCTIONS
-    const getMove = function(){
-        let y = getRandomCoordinate();
-        let x = getRandomCoordinate();
-        
-        while (player.gameboard.isAlreadyAttacked(y, x)){
-            console.log(`${y}, ${x} already registered as an attack`);
-            y = getRandomCoordinate();
-            x = getRandomCoordinate();
-        }
-
-        return {y, x};
-    }
-
-    const getRandomCoordinate = function(){
+     const getRandomCoordinate = function(){
         return Math.floor(Math.random() * BOARD_SIZE);
     }
+    
 
 
     initializeGame();
@@ -119,6 +159,11 @@ function gameDriver(player, computer, playerShips, computerShips){
 
 
 gameDriver(player, computer, playerShips, computerShips);
+
+
+
+
+
 
 
 
