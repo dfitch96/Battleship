@@ -132,14 +132,21 @@ export class Gameboard{
             return false;
         }
 
-        for(let col = x; col < x + shipLength; col++){
-            if (this.board[y][col] !== null){
-                return false;
+        let row = Math.max(y - 1, 0);
+        const rows = Math.min(y + 2, BOARD_SIZE);
+        const colStart = Math.max(x - 1, 0);
+        const colEnd = Math.min(x + shipLength + 1, BOARD_SIZE);
+
+        for(; row < rows; row++){
+            for(let col = colStart; col < colEnd; col++){
+                if (this.board[row][col] !== null){
+                    return false;
+                }
             }
+
         }
-
+        
         return true;
-
     }
 
     #verifyYAxis(y, x, shipLength){
@@ -147,9 +154,17 @@ export class Gameboard{
             return false;
         }
 
-        for(let row = y; row < y + shipLength; row++){
-            if(this.board[row][x] !== null){
-                return false;
+        // verify no ship has already been placed in this area of the grid
+        const colStart = Math.max(x - 1, 0);
+        const colEnd = Math.min(x + 2, BOARD_SIZE);
+        const rowStart = Math.max(y - 1, 0);
+        const rowEnd = Math.min(y + shipLength + 1, BOARD_SIZE);
+
+        for(let row = rowStart; row < rowEnd; row++){
+            for(let col = colStart; col < colEnd; col++){
+                if(this.board[row][col] !== null){
+                    return false;
+                }
             }
         }
 

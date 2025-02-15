@@ -28,6 +28,8 @@ header > #ship-icon{
     width: auto;
 }
 
+
+
 main{
     display: flex;
     justify-content: center;
@@ -39,8 +41,8 @@ main .player-board{
     background-color: var(--secondary-color);
     position: relative;
     display: grid;
-    grid-template-columns: repeat(10, minmax(60px, 1fr));
-    grid-template-rows: repeat(10, minmax(60px, 1fr));
+    grid-template-columns: repeat(10, minmax(50px, 1fr));
+    grid-template-rows: repeat(10, minmax(50px, 1fr));
     border: 4px solid black;
 }
 
@@ -67,13 +69,14 @@ main .player-board{
 .ship-item{
     background-color: var(--ship-color);
     border: 4px solid var(--primary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .hit-item{
     background-color: red;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    
 }
 
 
@@ -99,5 +102,19 @@ h2.player-header{
 .buttons button{
     color: black;
     padding: 5px;
+}
+
+
+#event-log{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+}
+
+#event-log > output{
+    background-color: var(--secondary-color);
+    color: black;
+    padding: 15px;
 }
 

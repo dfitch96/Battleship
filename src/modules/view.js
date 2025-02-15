@@ -147,7 +147,6 @@ export function renderSuccessfullAttack(player, y, x){
 
     const playerBoard = document.querySelector(`#${player}`);
     const cell = playerBoard.querySelector(`[data-row="${y}"][data-col="${x}"]`);
-    cell.classList.remove(ClassNames.BOARD_ITEM);
     cell.classList.add(ClassNames.HIT_ITEM);
     const blastIcon = document.createElement('img');
     blastIcon.src = './images/blast.png';
@@ -239,6 +238,12 @@ export function addButton(btnText, handler){
     newButton.textContent = btnText;
     newButton.addEventListener('click', handler);
     buttonsDiv.appendChild(newButton);
+}
+
+
+export function log(msg){
+    const output = document.querySelector('output');
+    output.textContent = msg;
 }
 
 

@@ -3,7 +3,7 @@ import { BOARD_SIZE } from './modules/gameboard.js';
 import {Player, playerTypes} from './modules/player.js';
 import { MoveMaker } from './modules/move-maker.js';
 import { ShipTypes } from './modules/ship-types.js';
-import {printGrid, renderPlayerGrid, renderShip, clearPlayerGrid, disableBoard, enableBoard, addPlayerMoveEventListeners, renderSuccessfullAttack, renderMissedAttack, disableBoardGameOver, removePlayerMoveEventListeners, addButtonGroup, addButton, removeButtonGroup} from './modules/view.js';
+import {printGrid, log, renderPlayerGrid, renderShip, clearPlayerGrid, disableBoard, enableBoard, addPlayerMoveEventListeners, renderSuccessfullAttack, renderMissedAttack, disableBoardGameOver, removePlayerMoveEventListeners, addButtonGroup, addButton, removeButtonGroup} from './modules/view.js';
 
 
 const MAX_TIMEOUT = 2000;
@@ -93,11 +93,13 @@ function gameDriver(){
         if(player.gameboard.recieveAttack(move.y, move.x)){
             console.log(`Computer successfully attacked at y: ${move.y} and x: ${move.x}`);
             renderSuccessfullAttack(player.getPlayerType(), move.y, move.x);
-            setTimeout(handleComputerMove, getRandomTimeout());
+            
             if(player.gameboard.areShipsSunk()){
                 enableBoard(computer.getPlayerType());
                 gameOver(computer, player);
             }
+
+            setTimeout(handleComputerMove, getRandomTimeout());
 
         } else{
             console.log(`Computer missed attack at y: ${move.y} and x: ${move.x}`);
@@ -111,6 +113,7 @@ function gameDriver(){
 
     const gameOver = function(winner, loser){
         console.log(`${winner.getPlayerType()} Wins!`);
+        //log(`${winner.getPlayerType()} Wins!`);
         disableBoardGameOver(winner);
         disableBoardGameOver(loser);
     }
