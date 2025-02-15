@@ -1,4 +1,6 @@
 import {Ship}from './ship.js';
+import { ShipTypes } from './ship-types.js';
+import { getRandomCoordinate } from './random.js';
 
 export const BOARD_SIZE = 10;
 
@@ -174,6 +176,31 @@ export class Gameboard{
     }
 
 
+    placeRandomShips(){
+    
+        for(const shipKey in ShipTypes){
+            console.log(`${shipKey} ALLOCATED: ${ShipTypes[shipKey][0]} LENGTH: ${ShipTypes[shipKey][1]}`);
+
+            const numAllocated = ShipTypes[shipKey][0];
+            const shipLength = ShipTypes[shipKey][1];
+            // for the number of ships which are allocated of this type,
+            for(let i = 0; i < numAllocated; i++){
+                let y = getRandomCoordinate();
+                let x = getRandomCoordinate();
+                let axis = Math.round(Math.random()) === 0 ? 'x' : 'y';
+
+                while(!this.placeShip(shipLength, y, x, axis)){
+                    y = getRandomCoordinate();
+                    x = getRandomCoordinate();
+                    axis = Math.round(Math.random()) === 0 ? 'x' : 'y';
+                }
+
+            }
+        }
+    }
+
+
+
     recieveAttack(y, x){
         
         if(this.board[y][x] === null){
@@ -224,6 +251,8 @@ export class Gameboard{
         }
 
     }
+
+   
 
 
 }
