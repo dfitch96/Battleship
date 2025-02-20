@@ -149,7 +149,7 @@ export function renderSuccessfullAttack(player, y, x){
     const cell = playerBoard.querySelector(`[data-row="${y}"][data-col="${x}"]`);
     cell.classList.add(ClassNames.HIT_ITEM);
     const blastIcon = document.createElement('img');
-    blastIcon.src = './images/blast.png';
+    blastIcon.src = './src/images/blast.png';
     cell.appendChild(blastIcon);
 }
 
@@ -158,7 +158,7 @@ export function renderMissedAttack(player, y, x){
     const playerBoard = document.querySelector(`#${player}`);
     const cell = playerBoard.querySelector(`[data-row="${y}"][data-col="${x}"]`);
     const missIcon = document.createElement('img');
-    missIcon.src = './images/close.png';
+    missIcon.src = './src/images/close.png';
     cell.appendChild(missIcon);
 
 }
