@@ -17,6 +17,7 @@ export class MoveMaker{
         this.sightedTarget = null;
         this.targetQueueLeft = [];
         this.targetQueueRight = [];
+        this.movingLeft = true;
     }
 
     #initDecisions(){
@@ -52,14 +53,17 @@ export class MoveMaker{
             
         } else if(this.state === DecisionStates.SIGHTED){
             decision = this.sightedStack.pop();
-            
 
         } else if(this.state === DecisionStates.TARGET){
+
+            if(this.targetQueueLeft.length === 0 && this.movingLeft){
+                this.movingLeft = false;
+            }
             
-            if(this.targetQueueLeft.length !== 0){
+            if(this.targetQueueLeft.length !== 0 && this.movingLeft){
                 decision = this.targetQueueLeft.shift();
             
-            } else if (this.targetQueueRight.length !== 0){
+            } else if (this.targetQueueRight.length !== 0 && !this.movingLeft){
                 decision = this.targetQueueRight.shift();
             }
 
@@ -86,6 +90,7 @@ export class MoveMaker{
             console.log('moving to TARGET state');
             this.state = DecisionStates.TARGET;
             this.sightedStack = [];
+            
 
             const prevRowMove = y - this.sightedTarget.y
             if(prevRowMove !== 0){
@@ -96,6 +101,13 @@ export class MoveMaker{
             if(prevColMove !== 0){
                 this.#populateRow(y, x);
             } 
+
+            if(this.targetQueueLeft.length === 0 && this.targetQueueRight.length === 0){
+                this.state = DecisionStates.HUNT;
+                return
+            }
+
+            this.movingLeft = this.targetQueueLeft.length !== 0 ? true : false;
 
         } 
            
@@ -165,9 +177,10 @@ export class MoveMaker{
     targetMiss(){
         if(this.state === DecisionStates.TARGET){
             
-            if(this.targetQueueLeft.length !== 0){
+            if(this.targetQueueLeft.length !== 0 && this.movingLeft){
                 this.targetQueueLeft = [];
-            } else if (this.targetQueueRight.length !== 0){
+                this.movingLeft = false;
+            } else if (this.targetQueueRight.length !== 0 && !this.movingLeft){
                 this.targetQueueRight = [];
             }
 
