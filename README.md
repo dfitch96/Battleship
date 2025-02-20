@@ -10,3 +10,30 @@ This is a classic Battleship game built with JavaScript. The game follows the pr
 - __AI Opponent:__ The computer makes intelligent moves, avoiding duplicate attacks and prioritizing adjacent targets after a hit.
 - __Endgame Condition:__ The game ends when all ships of a player are sunk.
 - __User Interface:__ A graphical interface displays both player and computer gameboards, updating dynamically with game progress.
+
+## Installation
+1. Clone the repository:
+   ```bash
+   git@github.com:dfitch96/Battleship.git
+2. Install Dependencies
+   ```bash
+   npm install
+
+## Game Rules
+1. Players start by placing ships on a 10x10 grid.
+2. Ships can be placed horizontally or vertically.
+3. Players take turns selecting a coordinate to attack.
+4. The opponent’s board updates to reflect hits or misses.
+5. The game continues until one player has no remaining ships.
+
+## How It Works
+- Ship Class: Defines ship properties (length, hit status, sunk status).
+- Gameboard Class: Manages ship placement, tracking hits and misses.
+- Player Class: Handles player and computer actions.
+- Computer AI: Randomly selects moves but follows a logical strategy after a successful hit.
+- DOM Module: Updates the UI dynamically based on game state.
+
+## Future Enhancements
+- Implement drag-and-drop ship placement.
+- Add a two-player mode.
+- Enhance AI to predict ship placements more effectively.
