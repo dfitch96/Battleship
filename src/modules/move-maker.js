@@ -120,14 +120,27 @@ export class MoveMaker{
 
         if(x + 1 < BOARD_SIZE){
             for(let col = x + 1; col < BOARD_SIZE; col++){
+                // if this decision has already been made and its not the sighted target
+                if(this.decisions[y][col] && this.sightedTarget.x !== col){
+                    break;
+                }
+
                 if(!this.decisions[y][col]){
                     this.targetQueueRight.push({y, x: col});
                 }
+
+
             }
         }
         
         if(x - 1 >= 0){
             for(let col = x - 1; col >= 0; col--){
+                
+                // if this decision has already been made and its not the sighted target
+                if(this.decisions[y][col] && this.sightedTarget.x !== col){
+                    break;
+                }
+
                 if(!this.decisions[y][col]){
                     this.targetQueueLeft.push({y, x: col});
                 }
@@ -144,6 +157,10 @@ export class MoveMaker{
         if(y - 1 >= 0){
             
             for(let row = y - 1; row >= 0; row--){
+                if(this.decisions[row][x] && this.sightedTarget.y !== row){
+                    break;
+                }
+
                 if(!this.decisions[row][x]){
                     this.targetQueueLeft.push({y: row , x});
                 }
@@ -154,6 +171,10 @@ export class MoveMaker{
         if(y + 1 < BOARD_SIZE){
             
             for(let row = y + 1; row < BOARD_SIZE; row++){
+                if(this.decisions[row][x] && this.sightedTarget.y !== row){
+                    break;
+                }
+
                 if(!this.decisions[row][x]){
                     this.targetQueueRight.push({y: row, x});
                 }
