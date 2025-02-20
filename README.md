@@ -2,9 +2,6 @@
 ## Overview
 This is a classic Battleship game built with JavaScript. The game follows the principles of Test-Driven Development (TDD) and includes a player-controlled board as well as an intelligent computer AI opponent. The project is part of __The Odin Project's__ curriculum and focuses on modular design and game logic implementation.
 
-## Live Preview
-[View the app live](https://dfitch96.github.io/Battleship/)
-
 ## Features
 - __Ship Placement:__ Players can manually place ships or randomly generate their placements.
 - __Gameboard Management:__ Tracks ship locations, missed shots, and hits.
@@ -39,3 +36,6 @@ This is a classic Battleship game built with JavaScript. The game follows the pr
 - Implement drag-and-drop ship placement.
 - Add a two-player mode.
 - Enhance AI to predict ship placements more effectively.
+
+## Live Preview
+[View the app live](https://dfitch96.github.io/Battleship/)
