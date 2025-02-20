@@ -101,7 +101,9 @@ function gameDriver(){
 
 
     const gameOver = function(winner, loser){
-        log(`${winner.getPlayerType()} Wins!`)
+        let winnerName = winner.getPlayerType();
+        winnerName = winnerName.charAt(0).toUpperCase() + winnerName.slice(1);
+        log(`${winnerName} Wins!`)
         //log(`${winner.getPlayerType()} Wins!`);
         disableBoardGameOver(winner);
         disableBoardGameOver(loser);
