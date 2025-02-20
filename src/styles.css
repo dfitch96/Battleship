@@ -109,12 +109,19 @@ h2.player-header{
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 40px;
   
 }
 
 #event-log > output{
     background-color: var(--secondary-color);
-    color: black;
     padding: 15px;
+    width: 400px;
+    height: 100px;
+    overflow: auto;
+}
+
+output > div{
+    color: black;
 }
 

@@ -243,7 +243,16 @@ export function addButton(btnText, handler){
 
 export function log(msg){
     const output = document.querySelector('output');
-    output.textContent = msg;
+    const textDiv = document.createElement('div');
+    textDiv.textContent = msg;
+    output.appendChild(textDiv);
+    output.scrollTop = output.scrollHeight;
+}
+
+
+export function displayLog(){
+    const eventLog = document.querySelector('#event-log');
+    eventLog.removeAttribute('style');
 }
 
 

@@ -4,11 +4,8 @@ import {Player, playerTypes} from './modules/player.js';
 import { MoveMaker } from './modules/move-maker.js';
 import { ShipTypes } from './modules/ship-types.js';
 import { getRandomCoordinate, getRandomTimeout } from './modules/random.js';
-import {printGrid, log, renderPlayerGrid, renderShip, clearPlayerGrid, disableBoard, enableBoard, addPlayerMoveEventListeners, renderSuccessfullAttack, renderMissedAttack, disableBoardGameOver, removePlayerMoveEventListeners, addButtonGroup, addButton, removeButtonGroup} from './modules/view.js';
+import {printGrid, log, renderPlayerGrid, renderShip, clearPlayerGrid, disableBoard, enableBoard, addPlayerMoveEventListeners, renderSuccessfullAttack, renderMissedAttack, disableBoardGameOver, removePlayerMoveEventListeners, addButtonGroup, addButton, removeButtonGroup, displayLog} from './modules/view.js';
 
-
-// const MAX_TIMEOUT = 2000;
-// const MIN_TIMEOUT = 1000;
 
 function gameDriver(){
 
@@ -28,10 +25,15 @@ function gameDriver(){
     
     const initializeGame = function(){
 
+        
+
         renderPlayerGrid(computer.getPlayerType());
+        addPlayerMoveEventListeners(handlePlayerMove);
         computer.gameboard.placeRandomShips();
         computer.gameboard.printSea();
         disableBoard(player.getPlayerType());
+        log('Battle!');
+        
     }
 
 
@@ -41,12 +43,20 @@ function gameDriver(){
         const col = event.target.dataset.col;
 
         if(computer.gameboard.recieveAttack(row, col)){
+            log(`You hit a target at (${Number(col) + 1},${Number(row) + 1})`)
             renderSuccessfullAttack(computer.getPlayerType(), row, col);
+
+            if(computer.gameboard.isShipSunk(row, col)){
+                log('You sunk a ship')
+            }
+
             if(computer.gameboard.areShipsSunk()){
                 enableBoard(player.getPlayerType());
                 gameOver(player, computer);
             }
+
         } else {
+            log(`You missed at (${Number(col) + 1},${Number(row) + 1})`)
             renderMissedAttack(computer.getPlayerType(), row, col);
             enableBoard(player.getPlayerType());
             disableBoard(computer.getPlayerType());
@@ -61,12 +71,13 @@ function gameDriver(){
         
         const move = moveMaker.getMove();
         if(player.gameboard.recieveAttack(move.y, move.x)){
-            console.log(`Computer successfully attacked at y: ${move.y} and x: ${move.x}`);
+            log(`Computer hit a target at (${move.x + 1},${move.y + 1})`)
             moveMaker.targetHit(move.y, move.x);
             renderSuccessfullAttack(player.getPlayerType(), move.y, move.x);
             
             if(player.gameboard.isShipSunk(move.y, move.x)){
                 console.log('')
+                log('Computer sunk a ship');
                 moveMaker.targetSunk();
             }
 
@@ -79,12 +90,9 @@ function gameDriver(){
             setTimeout(handleComputerMove, getRandomTimeout());
 
         } else{
-            console.log(`Computer missed attack at y: ${move.y} and x: ${move.x}`);
+            log(`Computer missed at (${move.x + 1},${move.y + 1})`)
             moveMaker.targetMiss();
-
-            
             renderMissedAttack(player.getPlayerType(), move.y, move.x);
-            
             enableBoard(computer.getPlayerType());
             disableBoard(player.getPlayerType());
         }
@@ -93,7 +101,7 @@ function gameDriver(){
 
 
     const gameOver = function(winner, loser){
-        console.log(`${winner.getPlayerType()} Wins!`);
+        log(`${winner.getPlayerType()} Wins!`)
         //log(`${winner.getPlayerType()} Wins!`);
         disableBoardGameOver(winner);
         disableBoardGameOver(loser);
@@ -111,8 +119,10 @@ function gameDriver(){
     const handleStartGameOnClick = function(){
 
         removeButtonGroup();
-        initializeGame();
-        addPlayerMoveEventListeners(handlePlayerMove);
+        displayLog();
+        log('Game Loading....');
+        setTimeout(initializeGame, 2000);
+        
     }
     
     setupPlayerBoard();
