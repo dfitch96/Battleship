@@ -1,17 +1,22 @@
 
 import { BOARD_SIZE } from "./gameboard.js";
+import { getRandomCoordinate } from "./random.js";
 
 const DecisionStates = {
     HUNT: 0,
-    TARGET: 1
+    SIGHTED: 1,
+    TARGET: 2
 }
-
 
 export class MoveMaker{
 
     constructor(){
         this.state = DecisionStates.HUNT;
         this.decisions = this.#initDecisions();
+        this.sightedStack = [];
+        this.sightedTarget = null;
+        this.targetQueueLeft = [];
+        this.targetQueueRight = [];
     }
 
     #initDecisions(){
@@ -30,40 +35,166 @@ export class MoveMaker{
 
     getMove(){
 
+        console.log('getting move in state ' + this.state);
+        let decision = null;
         if(this.state === DecisionStates.HUNT){
-            let y = this.getRandomCoordinate();
-            let x = this.getRandomCoordinate();
+            let y = getRandomCoordinate();
+            let x = getRandomCoordinate();
 
             // while we've already made this decision, pick another random point
             while (this.decisions[y][x] === true){  
-                console.log(`${y}, ${x} already registered as an attack`);
-                y = this.getRandomCoordinate();
-                x = this.getRandomCoordinate();
+                y = getRandomCoordinate();
+                x = getRandomCoordinate();
             }
 
             this.decisions[y][x] = true;
-            return {y, x};
+            decision = {y, x};
+            
+        } else if(this.state === DecisionStates.SIGHTED){
+            decision = this.sightedStack.pop();
+            
+
+        } else if(this.state === DecisionStates.TARGET){
+            
+            if(this.targetQueueLeft.length !== 0){
+                decision = this.targetQueueLeft.shift();
+            
+            } else if (this.targetQueueRight.length !== 0){
+                decision = this.targetQueueRight.shift();
+            }
+
         }
+        
+        
+        this.decisions[decision.y][decision.x] = true;
+        
+        return decision;
         
     }
 
-    markDecision(isSuccess, y, x){
+    targetHit(y, x){
 
+        console.log('target hit in state ' + this.state);
         if(this.state === DecisionStates.HUNT){
-            // move to TARGET state
-            // append adjacent coordinates that havent already been targeted to target queue 
-        } else{
-            // if decision was a successful hit, continue moving in that directionwaa
+            // move to SIGHTED state
+            console.log('moving to SIGHTED state');
+            this.state = DecisionStates.SIGHTED;
+            this.sightedTarget = {y, x};
+            this.#pushAdjacentTargets(y, x);
 
+        } else if(this.state === DecisionStates.SIGHTED){
+            console.log('moving to TARGET state');
+            this.state = DecisionStates.TARGET;
+            this.sightedStack = [];
+
+            const prevRowMove = y - this.sightedTarget.y
+            if(prevRowMove !== 0){
+                this.#populateColumn(y, x);
+            }
+            
+            const prevColMove = x - this.sightedTarget.x;
+            if(prevColMove !== 0){
+                this.#populateRow(y, x);
+            } 
+
+        } 
+           
+    }
+
+
+    #populateRow(y, x){
+
+        // populate targetStacks
+
+        if(x + 1 < BOARD_SIZE){
+            for(let col = x + 1; col < BOARD_SIZE; col++){
+                if(!this.decisions[y][col]){
+                    this.targetQueueRight.push({y, x: col});
+                }
+            }
+        }
+        
+        if(x - 1 >= 0){
+            for(let col = x - 1; col >= 0; col--){
+                if(!this.decisions[y][col]){
+                    this.targetQueueLeft.push({y, x: col});
+                }
+            }
         }
 
+    }
+
+
+    #populateColumn(y, x){
+
+       
+        // populate targetStacks
+        if(y - 1 >= 0){
+            
+            for(let row = y - 1; row >= 0; row--){
+                if(!this.decisions[row][x]){
+                    this.targetQueueLeft.push({y: row , x});
+                }
+                
+            }
+        }
         
+        if(y + 1 < BOARD_SIZE){
+            
+            for(let row = y + 1; row < BOARD_SIZE; row++){
+                if(!this.decisions[row][x]){
+                    this.targetQueueRight.push({y: row, x});
+                }
+                
+            }
+        }
+
     }
 
-    
-    getRandomCoordinate(){
-        return Math.floor(Math.random() * BOARD_SIZE);
+
+
+    targetSunk(){
+
+        console.log('TARGET sunk');
+        this.state = DecisionStates.HUNT;
+        this.targetQueueLeft = [];
+        this.targetQueueRight = [];
+
     }
 
+    targetMiss(){
+        if(this.state === DecisionStates.TARGET){
+            
+            if(this.targetQueueLeft.length !== 0){
+                this.targetQueueLeft = [];
+            } else if (this.targetQueueRight.length !== 0){
+                this.targetQueueRight = [];
+            }
+
+            // if(this.targetQueueLeft.length === 0 && this.targetQueueRight.length === 0){
+            //     this.state = DecisionStates.HUNT;
+            // }
+
+        }
+    }
+
+    #pushAdjacentTargets(y, x){
+
+        if(y - 1 >= 0 && !this.decisions[y - 1][x]){
+            this.sightedStack.push({y: y - 1, x: x});
+        } 
+
+        if(y + 1 < BOARD_SIZE && !this.decisions[y + 1][x]){
+            this.sightedStack.push({y: y + 1, x: x});
+        }
+
+        if(x - 1 >= 0 && !this.decisions[y][x - 1]){
+            this.sightedStack.push({y: y, x: x - 1});
+        }
+
+        if(x + 1 < BOARD_SIZE && !this.decisions[y][x + 1]){
+            this.sightedStack.push({y: y, x: x + 1});
+        }
+    }
 
 }

@@ -232,6 +232,16 @@ export class Gameboard{
 
     }
 
+    isShipSunk(y, x){
+
+        if(this.board[y][x] !== null){
+            return this.board[y][x].ship.isSunk();
+        }
+
+        return false;
+    
+    }
+
 
     printSea(){
         

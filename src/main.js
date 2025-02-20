@@ -15,15 +15,7 @@ function gameDriver(){
     const moveMaker = new MoveMaker();
     const player = new Player(playerTypes.PLAYER);
     const computer = new Player(playerTypes.COMPUTER);
-    const computerShips = [
-        [5, 1, 3, 'x'],
-        [4, 1, 1, 'y'],
-        [3, 4, 4, 'x'],
-        [3, 6 , 2, 'y'],    
-        [2, 7, 6, 'x']
-    ];
-
-
+   
     const setupPlayerBoard = function(){
 
         renderPlayerGrid(player.getPlayerType());
@@ -42,7 +34,7 @@ function gameDriver(){
         disableBoard(player.getPlayerType());
     }
 
-    
+
 
     const handlePlayerMove = function(event){
         const row = event.target.dataset.row;
@@ -66,21 +58,33 @@ function gameDriver(){
 
     const handleComputerMove = function(){
         
+        
         const move = moveMaker.getMove();
         if(player.gameboard.recieveAttack(move.y, move.x)){
             console.log(`Computer successfully attacked at y: ${move.y} and x: ${move.x}`);
+            moveMaker.targetHit(move.y, move.x);
             renderSuccessfullAttack(player.getPlayerType(), move.y, move.x);
             
+            if(player.gameboard.isShipSunk(move.y, move.x)){
+                console.log('')
+                moveMaker.targetSunk();
+            }
+
             if(player.gameboard.areShipsSunk()){
                 enableBoard(computer.getPlayerType());
                 gameOver(computer, player);
+                return;
             }
 
             setTimeout(handleComputerMove, getRandomTimeout());
 
         } else{
             console.log(`Computer missed attack at y: ${move.y} and x: ${move.x}`);
+            moveMaker.targetMiss();
+
+            
             renderMissedAttack(player.getPlayerType(), move.y, move.x);
+            
             enableBoard(computer.getPlayerType());
             disableBoard(player.getPlayerType());
         }
@@ -114,8 +118,9 @@ function gameDriver(){
     setupPlayerBoard();
 }
 
-
 gameDriver();
+
+
 
 
 
