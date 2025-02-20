@@ -22,7 +22,7 @@ This is a classic Battleship game built with JavaScript. The game follows the pr
 ## Game Rules
 1. Players start by placing ships on a 10x10 grid.
 2. Ships can be placed horizontally or vertically.
-3. Players take turns selecting a coordinate to attack.
+3. Players take turns selecting a coordinate to attack. If an attack successfully hits a ship, the player gets another turn. Otherwise, the turn passes to the opponent.
 4. The opponent’s board updates to reflect hits or misses.
 5. The game continues until one player has no remaining ships.
 
