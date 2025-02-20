@@ -35,7 +35,6 @@ This is a classic Battleship game built with JavaScript. The game follows the pr
 ## Future Enhancements
 - Implement drag-and-drop ship placement.
 - Add a two-player mode.
-- Enhance AI to predict ship placements more effectively.
 
 ## Live Preview
 [View the app live](https://dfitch96.github.io/Battleship/)
