@@ -3,16 +3,24 @@
     --secondary-color: rgb(255, 255, 255);
     --ship-color: rgb(141, 136, 136, 40%);
     --ship-border-color: rgb(45, 45, 129, 80%);
+    --header-footer-color: rgb(7, 7, 51);
 }
 
 *{
     box-sizing: border-box;
+    margin: 0;
     color: white;
+    font-family: "Orbitron", serif;
 }
 
 
 body{
     background-color: var(--primary-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh;
+    min-width: 100vw;
 }
 
 body > header{
@@ -20,7 +28,8 @@ body > header{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 5px;
+    padding: 20px;
+    background-color: var(--header-footer-color);
 }
 
 header > #ship-icon{
@@ -35,6 +44,7 @@ main{
     justify-content: center;
     gap: 100px;
     align-items: center;
+    margin-top: 10px;
 }
 
 main .player-board{
@@ -44,6 +54,7 @@ main .player-board{
     grid-template-columns: repeat(10, minmax(50px, 1fr));
     grid-template-rows: repeat(10, minmax(50px, 1fr));
     border: 4px solid black;
+    margin-top: 10px;
 }
 
 .disabled-board{
@@ -101,7 +112,14 @@ h2.player-header{
 
 .buttons button{
     color: black;
-    padding: 5px;
+    padding: 10px;
+    border-radius: 15px;
+    border: none;
+}
+
+.buttons button:hover{
+    transform: scale(1.2);
+    background-color: yellow;
 }
 
 
@@ -115,6 +133,7 @@ h2.player-header{
 
 #event-log > output{
     background-color: var(--secondary-color);
+    border-radius: 10px;
     padding: 15px;
     width: 400px;
     height: 100px;
@@ -123,5 +142,18 @@ h2.player-header{
 
 output > div{
     color: black;
+}
+
+
+footer{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    width: 100vw;
+    background-color: var(--header-footer-color);
+    margin-top: 50px;
+    font-size: 1rem;
 }
 
