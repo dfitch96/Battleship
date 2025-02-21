@@ -1,9 +1,9 @@
 :root{
-    --primary-color: rgb(45, 45, 129);
+    --primary-color: rgb(50, 50, 124);
     --secondary-color: rgb(255, 255, 255);
     --ship-color: rgb(141, 136, 136, 40%);
     --ship-border-color: rgb(45, 45, 129, 80%);
-    --header-footer-color: rgb(7, 7, 51);
+    --header-footer-color: rgb(35, 35, 80);
 }
 
 *{
