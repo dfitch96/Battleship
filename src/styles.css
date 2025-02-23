@@ -49,6 +49,7 @@ main{
 
 main .player-board{
     background-color: var(--secondary-color);
+    
     position: relative;
     display: grid;
     grid-template-columns: repeat(10, minmax(50px, 1fr));
@@ -75,6 +76,11 @@ main .player-board{
     display: flex;
     justify-content: center;
     align-items: center;
+    
+}
+
+#computer .board-item{
+    cursor: pointer;
 }
 
 .ship-item{
