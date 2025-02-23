@@ -121,6 +121,7 @@ h2.player-header{
     padding: 10px;
     border-radius: 15px;
     border: none;
+    cursor: pointer;
 }
 
 .buttons button:hover{
